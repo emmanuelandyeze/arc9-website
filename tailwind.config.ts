@@ -48,7 +48,11 @@ const config: Config = {
 					...defaultTheme.fontFamily.sans,
 				],
 				body: [
-					'var(--font-inter)',
+					'var(--font-pacifico)',
+					...defaultTheme.fontFamily.sans,
+				],
+				pacifico: [
+					'var(--font-pacifico)',
 					...defaultTheme.fontFamily.sans,
 				],
 			},

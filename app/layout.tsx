@@ -48,9 +48,9 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			className={`${outfit.variable} ${pacifico.variable} ${raleway.variable}`}
+			className={`${pacifico.variable} ${raleway.variable}`}
 		>
-			<body className="font-heading text-neutral-800 bg-neutral-50 antialiased">
+			<body className="font-body text-neutral-800 bg-neutral-50 antialiased">
 				<Layout>
 					{' '}
 					{/* Wrap the children with our new Layout component */}

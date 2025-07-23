@@ -16,6 +16,12 @@ import {
 	RiArrowUpDoubleFill,
 } from 'react-icons/ri';
 import { FaCircleArrowRight } from 'react-icons/fa6';
+import {
+	Pacifico,
+	Raleway,
+	Open_Sans,
+	Kranky,
+} from 'next/font/google';
 
 // Helper to check if it's a mobile view (Tailwind's 'md' breakpoint)
 const isMobileView = () => {
@@ -81,12 +87,26 @@ const heroSlides: HeroSlide[] = [
 	// },
 ];
 
+const pacifico = Pacifico({
+	weight: '400',
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-pacifico',
+});
+
+const raleway = Kranky({
+	weight: '400',
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-raleway',
+});
+
 // Background images for the carousel
 const backgroundImages = [
 	'/images/projects/GA 3.png',
 	'/images/projects/v2.png',
 	'/images/projects/Living room 2.jpg',
-	'/images/projects/2.png',
+	'/images/projects/GYM 3.png',
 ];
 
 const HeroSection: React.FC = () => {
@@ -389,7 +409,7 @@ const HeroSection: React.FC = () => {
 					<div
 						key={slide.id}
 						id={`hero-slide-${slide.id}`}
-						className={`flex-shrink-0 relative snap-center flex items-center justify-start p-6 md:p-0 text-left ${
+						className={`flex-shrink-0 relative snap-center flex pt-[10rem] md:pt-[5rem] justify-start px-6 pb-6 md:px-0 text-left ${
 							isMobileView()
 								? 'w-full h-screen'
 								: 'w-screen h-full'
@@ -399,7 +419,7 @@ const HeroSection: React.FC = () => {
 						<motion.div
 							className={`relative z-20 text-white flex flex-col items-start max-w-6xl ${
 								slide.textPosition === 'top-left'
-									? 'lg:pl-20 lg:pt-20'
+									? 'lg:pl-14 lg:pt-20'
 									: slide.textPosition === 'center'
 									? 'lg:mx-auto lg:my-auto text-center items-center'
 									: 'lg:pr-20 lg:pb-20 lg:ml-auto'
@@ -425,33 +445,41 @@ const HeroSection: React.FC = () => {
 								},
 							}}
 						>
+							<motion.div className="w-[100%] md:w-[60%]">
+								<motion.p
+									className="mb-14 md:mb-20 text-base  sm:text-lg lg:text-xl font-body max-w-2xl drop-shadow-lg"
+									// variants={itemVariants}
+								>
+									We merge creativity, technology, and
+									precision to design spaces that inspire
+									and endure.
+								</motion.p>
+							</motion.div>
 							<motion.h1
-								className={`text-4xl sm:text-5xl lg:text-6xl font-heading font-semibold leading-tight drop-shadow-lg ${
+								className={`text-6xl lg:pl-28 sm:text-7xl lg:text-[6.5rem] font-bold leading-tight ${
+									raleway.className
+								} drop-shadow-lg ${
 									slide.textPosition === 'center'
 										? 'max-w-3xl'
 										: 'max-w-2xl'
 								}`}
-								// variants={{}}
 							>
-								{slide.title}
+								Building
 							</motion.h1>
-							{slide.subtitle && (
-								<motion.p
-									className="mt-4 text-lg sm:text-xl lg:text-2xl font-body max-w-2xl drop-shadow-lg"
-									// variants={itemVariants}
-								>
-									{slide.subtitle}
-								</motion.p>
-							)}
-							<motion.p
-								className="mt-4 text-base sm:text-lg lg:text-xl font-body max-w-2xl drop-shadow-lg hidden md:block"
-								// variants={itemVariants}
+							<motion.h1
+								className={`text-5xl lg:pl-28 sm:text-6xl lg:text-7xl ${
+									pacifico.className
+								} font-semibold leading-tight drop-shadow-lg ${
+									slide.textPosition === 'center'
+										? 'max-w-3xl'
+										: 'max-w-2xl'
+								}`}
 							>
-								{slide.description}
-							</motion.p>
+								the future
+							</motion.h1>
 							<motion.div
 								// variants={itemVariants}
-								className="mt-8"
+								className="mt-8 lg:ml-28"
 							>
 								<Link href={slide.ctaLink} passHref>
 									<motion.button
@@ -511,6 +539,16 @@ const HeroSection: React.FC = () => {
 					</div>
 				))}
 			</div>
+			<motion.div className="absolute bottom-40 md:bottom-20 w-[50%] md:w-[25%] right-0 md:right-10 z-20">
+				<motion.p
+					className="mt-4 text-base sm:text-lg text-white text-left lg:text-xl font-body max-w-2xl drop-shadow-lg"
+					// variants={itemVariants}
+				>
+					From residential masterpieces to commercial
+					landmarks, our approach combines beauty with
+					functionality.
+				</motion.p>
+			</motion.div>
 
 			{/* Navigation Dots for Hero Slides */}
 			<div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex space-x-3">
