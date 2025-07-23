@@ -1,7 +1,6 @@
-// src/components/Navbar.tsx
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react'; // Import useRef
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
@@ -22,16 +21,18 @@ const NavLink: React.FC<NavLinkProps> = ({
 }) => (
 	<Link
 		href={href}
-		className={`relative block py-2 px-3 text-lg font-heading transition-colors duration-300 ${
-			isTransparent
-				? 'text-white hover:text-brandPrimary-light'
-				: 'text-neutral-800 hover:text-brandPrimary-dark'
+		className={`relative block py-2 px-4 text-lg font-heading transition-all duration-300 rounded-full ${
+			!isTransparent
+				? 'text-neutral-800 hover:text-neutral-900 hover:bg-neutral-100/30'
+				: 'text-white/90 hover:text-white hover:bg-white/20'
 		}`}
 		onClick={onClick}
 	>
 		{children}
 		<motion.span
-			className="absolute bottom-0 left-0 h-[2px] bg-brandPrimary w-full"
+			className={`absolute bottom-0 left-0 h-[2px] ${
+				isTransparent ? 'bg-neutral-800' : 'bg-white/80'
+			}`}
 			initial={{ scaleX: 0 }}
 			whileHover={{ scaleX: 1 }}
 			transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -47,7 +48,7 @@ const MobileNavLink: React.FC<NavLinkProps> = ({
 }) => (
 	<Link
 		href={href}
-		className="block text-4xl font-heading text-neutral-900 hover:text-brandPrimary py-4 transition-colors duration-300"
+		className="block text-4xl font-heading text-neutral-800 hover:text-neutral-900 hover:bg-neutral-100/30 py-4 px-6 transition-all duration-300 rounded-md"
 		onClick={onClick}
 	>
 		{children}
@@ -57,59 +58,46 @@ const MobileNavLink: React.FC<NavLinkProps> = ({
 const Navbar: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [scrolled, setScrolled] = useState(false);
-	const scrollY = useRef(0); // Use useRef to store scroll position
+	const scrollY = useRef(0);
 
 	useEffect(() => {
 		const handleScroll = () => {
 			const scrollThreshold = 100;
-			if (window.scrollY > scrollThreshold) {
-				setScrolled(true);
-			} else {
-				setScrolled(false);
-			}
+			setScrolled(window.scrollY > scrollThreshold);
 		};
 
 		window.addEventListener('scroll', handleScroll);
-		return () => {
+		return () =>
 			window.removeEventListener('scroll', handleScroll);
-		};
 	}, []);
 
-	// ******* CRUCIAL CHANGE HERE *******
 	useEffect(() => {
 		if (isOpen) {
-			// When modal opens, save current scroll position
 			scrollY.current = window.scrollY;
-
-			// Apply fixed positioning to body, accounting for scroll
 			document.body.style.position = 'fixed';
 			document.body.style.top = `-${scrollY.current}px`;
-			document.body.style.width = '100%'; // Prevent horizontal shift if scrollbar disappears
-			document.body.style.overflow = 'hidden'; // Keep this to prevent scrollbar
+			document.body.style.width = '100%';
+			document.body.style.overflow = 'hidden';
 		} else {
-			// When modal closes, restore body's original position and scroll
 			document.body.style.position = '';
 			document.body.style.top = '';
 			document.body.style.width = '';
 			document.body.style.overflow = '';
-			window.scrollTo(0, scrollY.current); // Scroll back to saved position
+			window.scrollTo(0, scrollY.current);
 		}
-		// Clean up on component unmount
 		return () => {
 			document.body.style.position = '';
 			document.body.style.top = '';
 			document.body.style.width = '';
 			document.body.style.overflow = '';
 		};
-	}, [isOpen]); // Only run when isOpen changes
+	}, [isOpen]);
 
 	const navLinks = [
-		{ name: 'Home', href: '/' },
-		{ name: 'About', href: '/about' },
-		{ name: 'Services', href: '/services' },
 		{ name: 'Projects', href: '/projects' },
+		{ name: 'About us', href: '/about' },
 		{ name: 'Blog', href: '/blog' },
-		{ name: 'Contact', href: '/contact' },
+		{ name: 'Services', href: '/services' },
 	];
 
 	const modalVariants = {
@@ -150,58 +138,79 @@ const Navbar: React.FC = () => {
 			transition={{ duration: 0.5, ease: 'easeOut' }}
 			className={`fixed w-full top-0 z-50 transition-all duration-300 ${
 				scrolled
-					? 'bg-neutral-60/80 backdrop-blur-sm shadow-sm'
+					? 'bg-white/10 backdrop-blur-md border-b border-white/20 shadow-lg'
 					: 'bg-transparent shadow-none'
 			}`}
 		>
 			<div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
-				{/* Logo/Brand */}
+				{/* Logo/Brand (Left) */}
 				<Link
 					href="/"
 					className={`flex items-center space-x-2 text-2xl font-heading ${
 						scrolled
-							? 'text-brandPrimary-dark'
-							: 'text-white'
+							? 'text-white/90 hover:text-white'
+							: 'text-neutral-800 hover:text-neutral-900'
 					}`}
 				>
-					<Image
-						src={'/images/logo.png'}
-						alt={'Arc9 Consult Logo'}
-						width={50}
-						height={50}
-					/>
+					{scrolled ? (
+						<Image
+							src={'/images/logo_full_2.png'}
+							alt={'Arc9 Consult Logo'}
+							width={150}
+							height={150}
+						/>
+					) : (
+						<Image
+							src={'/images/logo_full.png'}
+							alt={'Arc9 Consult Logo'}
+							width={150}
+							height={150}
+						/>
+					)}
 				</Link>
 
-				{/* Desktop Navigation */}
-				<div className="hidden md:flex space-x-8">
-					{navLinks.map((link) => (
-						<NavLink
-							key={link.name}
-							href={link.href}
-							isTransparent={!scrolled}
-						>
-							{link.name}
-						</NavLink>
-					))}
-					<motion.div className="">
-						<Link href={'/contact'} passHref>
-							<motion.button
-								className="bg-brandPrimary hover:bg-brandPrimary-dark cursor-pointer text-white font-body px-8 py-3 rounded-full text-lg shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-brandPrimary-light focus:ring-opacity-75"
-								whileHover={{ scale: 1.0 }}
-								whileTap={{ scale: 0.95 }}
+				{/* Desktop Navigation Links (Middle) */}
+				<div className="hidden md:flex flex-1 justify-center">
+					<div
+						className={`flex items-center space-x-8 rounded-full px-6 py-2 ${'bg-white/10 backdrop-blur-md border border-white/20 shadow-lg'}`}
+					>
+						{navLinks.map((link) => (
+							<NavLink
+								key={link.name}
+								href={link.href}
+								isTransparent={!scrolled}
 							>
-								Book a Consultation
-							</motion.button>
-						</Link>
-					</motion.div>
+								{link.name}
+							</NavLink>
+						))}
+					</div>
+				</div>
+
+				{/* Consultation Button (Right) */}
+				<div className="hidden md:flex">
+					<Link href={'/contact'} passHref>
+						<motion.button
+							className={`px-8 py-3 rounded-full text-lg font-body transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-neutral-300/50 ${
+								!scrolled
+									? 'bg-white/10 backdrop-blur-md border border-white/20 text-white/90 hover:text-white hover:bg-white/20'
+									: 'bg-neutral-800 text-white hover:bg-neutral-900'
+							}`}
+							whileHover={{ scale: 1.05 }}
+							whileTap={{ scale: 0.95 }}
+						>
+							Contact us
+						</motion.button>
+					</Link>
 				</div>
 
 				{/* Mobile Menu Button */}
 				<div className="md:hidden">
 					<button
 						onClick={() => setIsOpen(true)}
-						className={`focus:outline-none focus:ring-2 focus:ring-brandPrimary ${
-							scrolled ? 'text-neutral-800' : 'text-white'
+						className={`focus:outline-none focus:ring-2 focus:ring-neutral-300/50 ${
+							!scrolled
+								? 'text-white/90 hover:text-white'
+								: 'text-neutral-800 hover:text-neutral-900'
 						}`}
 						aria-label="Open mobile menu"
 					>
@@ -214,7 +223,11 @@ const Navbar: React.FC = () => {
 			<AnimatePresence>
 				{isOpen && (
 					<motion.div
-						className="fixed inset-0 bg-neutral-50 z-[60] flex flex-col items-center p-8 md:hidden"
+						className={`fixed inset-0 z-[60] flex flex-col items-center p-8 md:hidden ${
+							scrolled
+								? 'bg-white/10 backdrop-blur-md border-t border-white/20'
+								: 'bg-neutral-50'
+						}`}
 						// variants={modalVariants}
 						initial="hidden"
 						animate="visible"
@@ -223,7 +236,11 @@ const Navbar: React.FC = () => {
 						{/* Close Button */}
 						<button
 							onClick={() => setIsOpen(false)}
-							className="absolute top-6 right-6 text-neutral-800 hover:text-brandPrimary focus:outline-none focus:ring-2 focus:ring-brandPrimary"
+							className={`absolute top-6 right-6 focus:outline-none focus:ring-2 focus:ring-neutral-300/50 ${
+								scrolled
+									? 'text-white/90 hover:text-white'
+									: 'text-neutral-800 hover:text-neutral-900'
+							}`}
 							aria-label="Close mobile menu"
 						>
 							<RiCloseLine size={36} />
@@ -232,7 +249,7 @@ const Navbar: React.FC = () => {
 						{/* Navigation Links - SCROLLABLE CONTAINER */}
 						<motion.div
 							className="flex flex-col items-center w-full max-h-full overflow-y-auto py-12"
-							style={{ paddingTop: 'calc(4rem + 24px)' }} // This needs to be responsive if header/close button changes
+							style={{ paddingTop: 'calc(4rem + 24px)' }}
 						>
 							{navLinks.map((link) => (
 								<motion.div
