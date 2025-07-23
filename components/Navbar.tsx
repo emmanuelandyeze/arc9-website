@@ -61,36 +61,50 @@ const Navbar: React.FC = () => {
 	const scrollY = useRef(0);
 
 	useEffect(() => {
-		const handleScroll = () => {
-			const scrollThreshold = 100;
-			setScrolled(window.scrollY > scrollThreshold);
-		};
+		if (typeof window !== 'undefined') {
+			const handleScroll = () => {
+				const scrollThreshold = 100;
+				if (window.scrollY > scrollThreshold) {
+					setScrolled(true);
+				} else {
+					setScrolled(false);
+				}
+			};
 
-		window.addEventListener('scroll', handleScroll);
-		return () =>
-			window.removeEventListener('scroll', handleScroll);
+			window.addEventListener('scroll', handleScroll);
+			return () => {
+				window.removeEventListener('scroll', handleScroll);
+			};
+		}
 	}, []);
 
 	useEffect(() => {
-		if (isOpen) {
-			scrollY.current = window.scrollY;
-			document.body.style.position = 'fixed';
-			document.body.style.top = `-${scrollY.current}px`;
-			document.body.style.width = '100%';
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.position = '';
-			document.body.style.top = '';
-			document.body.style.width = '';
-			document.body.style.overflow = '';
-			window.scrollTo(0, scrollY.current);
+		if (typeof window !== 'undefined') {
+			if (isOpen) {
+				// When modal opens, save current scroll position
+				scrollY.current = window.scrollY;
+
+				// Apply fixed positioning to body, accounting for scroll
+				document.body.style.position = 'fixed';
+				document.body.style.top = `-${scrollY.current}px`;
+				document.body.style.width = '100%';
+				document.body.style.overflow = 'hidden';
+			} else {
+				// When modal closes, restore body's original position and scroll
+				document.body.style.position = '';
+				document.body.style.top = '';
+				document.body.style.width = '';
+				document.body.style.overflow = '';
+				window.scrollTo(0, scrollY.current); // Scroll back to saved position
+			}
+			// Clean up on component unmount
+			return () => {
+				document.body.style.position = '';
+				document.body.style.top = '';
+				document.body.style.width = '';
+				document.body.style.overflow = '';
+			};
 		}
-		return () => {
-			document.body.style.position = '';
-			document.body.style.top = '';
-			document.body.style.width = '';
-			document.body.style.overflow = '';
-		};
 	}, [isOpen]);
 
 	const navLinks = [

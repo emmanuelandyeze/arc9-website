@@ -427,7 +427,7 @@ const HeroSection: React.FC = () => {
 										? 'max-w-3xl'
 										: 'max-w-2xl'
 								}`}
-								// variants={itemVariants}
+								// variants={{}}
 							>
 								{slide.title}
 							</motion.h1>

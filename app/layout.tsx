@@ -1,7 +1,12 @@
 // src/app/layout.tsx
 import './globals.css';
 import type { Metadata } from 'next';
-import { Outfit, Inter, Raleway } from 'next/font/google';
+import {
+	Outfit,
+	Inter,
+	Raleway,
+	Pacifico,
+} from 'next/font/google';
 import Layout from '@/components/Layout'; // Import the Layout component
 
 const outfit = Outfit({
@@ -22,6 +27,13 @@ const inter = Inter({
 	variable: '--font-inter',
 });
 
+const pacifico = Pacifico({
+	weight: '400',
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-pacifico',
+});
+
 export const metadata: Metadata = {
 	title: 'Arc9 Consult - Architectural Portfolio & Blog',
 	description:
@@ -36,9 +48,9 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			className={`${outfit.variable} ${inter.variable} ${raleway.variable}`}
+			className={`${outfit.variable} ${pacifico.variable} ${raleway.variable}`}
 		>
-			<body className="font-body text-neutral-800 bg-neutral-50 antialiased">
+			<body className="font-heading text-neutral-800 bg-neutral-50 antialiased">
 				<Layout>
 					{' '}
 					{/* Wrap the children with our new Layout component */}

@@ -44,7 +44,7 @@ const config: Config = {
 			fontFamily: {
 				// Define CSS variables in layout.tsx first, then reference them here
 				heading: [
-					'var(--font-raleway)',
+					'var(--font-pacifico)',
 					...defaultTheme.fontFamily.sans,
 				],
 				body: [
