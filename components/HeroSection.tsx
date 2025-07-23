@@ -18,7 +18,11 @@ import {
 import { FaCircleArrowRight } from 'react-icons/fa6';
 
 // Helper to check if it's a mobile view (Tailwind's 'md' breakpoint)
-const isMobileView = () => window.innerWidth < 768;
+const isMobileView = () => {
+	if (typeof window !== 'undefined') {
+		return window.innerWidth <= 768;
+	}
+};
 
 // Define content for each slide (without images, as they’re now in a separate carousel)
 interface HeroSlide {
