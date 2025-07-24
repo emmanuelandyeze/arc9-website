@@ -35,9 +35,10 @@ const pacifico = Pacifico({
 });
 
 export const metadata: Metadata = {
-	title: 'Arc9 Consult - Architectural Portfolio & Blog',
+	title:
+		'Arc9 Consult | Innovative Architecture, Interior Design & Project Management in Nigeria',
 	description:
-		'Showcasing innovative architectural projects and thought leadership from Arc9 Consult.',
+		'Arc9 Consult delivers innovative and sustainable architectural designs, bespoke interior solutions, and expert project management across Nigeria. Partner with us for visionary spaces.',
 };
 
 export default function RootLayout({

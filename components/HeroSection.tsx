@@ -199,165 +199,6 @@ const HeroSection: React.FC = () => {
 		};
 	}, [activeSlide, scrollToSlide]);
 
-	// Handle touch events for mobile swiping
-	useEffect(() => {
-		const container = containerRef.current;
-		if (!container) return;
-
-		let touchStartX = 0;
-		let touchStartY = 0;
-		let touchEndX = 0;
-		let touchEndY = 0;
-
-		const handleTouchStart = (e: TouchEvent) => {
-			touchStartX = e.touches[0].clientX;
-			touchStartY = e.touches[0].clientY;
-		};
-
-		const handleTouchMove = (e: TouchEvent) => {
-			touchEndX = e.touches[0].clientX;
-			touchEndY = e.touches[0].clientY;
-
-			const deltaX = touchEndX - touchStartX;
-			const deltaY = touchEndY - touchStartY;
-
-			if (e.cancelable) {
-				if (isMobileView()) {
-					if (
-						Math.abs(deltaY) > Math.abs(deltaX) &&
-						Math.abs(deltaY) > 10
-					) {
-						e.preventDefault();
-					}
-				} else {
-					if (
-						Math.abs(deltaX) > Math.abs(deltaY) &&
-						Math.abs(deltaX) > 10
-					) {
-						e.preventDefault();
-					}
-				}
-			}
-		};
-
-		const handleTouchEnd = () => {
-			if (isAnimating.current) return;
-
-			const swipeThreshold = 50;
-
-			if (isMobileView()) {
-				if (
-					touchStartY - touchEndY > swipeThreshold &&
-					activeSlide < heroSlides.length - 1
-				) {
-					scrollToSlide(activeSlide + 1);
-				} else if (
-					touchEndY - touchStartY > swipeThreshold &&
-					activeSlide > 0
-				) {
-					scrollToSlide(activeSlide - 1);
-				}
-			} else {
-				if (
-					touchStartX - touchEndX > swipeThreshold &&
-					activeSlide < heroSlides.length - 1
-				) {
-					scrollToSlide(activeSlide + 1);
-				} else if (
-					touchEndX - touchStartX > swipeThreshold &&
-					activeSlide > 0
-				) {
-					scrollToSlide(activeSlide - 1);
-				}
-			}
-			touchStartX = 0;
-			touchStartY = 0;
-			touchEndX = 0;
-			touchEndY = 0;
-		};
-
-		container.addEventListener(
-			'touchstart',
-			handleTouchStart,
-			{ passive: true },
-		);
-		container.addEventListener(
-			'touchmove',
-			handleTouchMove,
-			{ passive: false },
-		);
-		container.addEventListener('touchend', handleTouchEnd);
-
-		return () => {
-			container.removeEventListener(
-				'touchstart',
-				handleTouchStart,
-			);
-			container.removeEventListener(
-				'touchmove',
-				handleTouchMove,
-			);
-			container.removeEventListener(
-				'touchend',
-				handleTouchEnd,
-			);
-		};
-	}, [activeSlide, scrollToSlide]);
-
-	// Update active slide based on native scroll
-	useEffect(() => {
-		const container = containerRef.current;
-		if (!container) return;
-
-		let scrollTimeout: NodeJS.Timeout;
-		const onScroll = () => {
-			clearTimeout(scrollTimeout);
-			scrollTimeout = setTimeout(() => {
-				let nearestSlideIndex;
-				if (isMobileView()) {
-					const currentScrollTop = container.scrollTop;
-					const slideHeight = container.offsetHeight;
-					nearestSlideIndex = Math.round(
-						currentScrollTop / slideHeight,
-					);
-				} else {
-					const currentScrollLeft = container.scrollLeft;
-					const slideWidth = container.offsetWidth;
-					nearestSlideIndex = Math.round(
-						currentScrollLeft / slideWidth,
-					);
-				}
-
-				if (nearestSlideIndex !== activeSlide) {
-					setActiveSlide(nearestSlideIndex);
-				}
-			}, 150);
-		};
-
-		container.addEventListener('scroll', onScroll);
-		return () => {
-			container.removeEventListener('scroll', onScroll);
-			clearTimeout(scrollTimeout);
-		};
-	}, [activeSlide]);
-
-	// Manage body/html scroll lock
-	useEffect(() => {
-		const disableScroll =
-			activeSlide < heroSlides.length - 1;
-		if (disableScroll) {
-			document.body.style.overflow = 'hidden';
-			document.documentElement.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = '';
-			document.documentElement.style.overflow = '';
-		}
-		return () => {
-			document.body.style.overflow = '';
-			document.documentElement.style.overflow = '';
-		};
-	}, [activeSlide]);
-
 	// Variants for text animations
 	const itemVariants = {
 		hidden: { y: 20, opacity: 0 },
@@ -447,16 +288,16 @@ const HeroSection: React.FC = () => {
 						>
 							<motion.div className="w-[100%] md:w-[60%]">
 								<motion.p
-									className="mb-14 md:mb-20 text-base  sm:text-lg lg:text-xl font-body max-w-2xl drop-shadow-lg"
+									className="mb-14 md:mb-[3.5rem] text-base  sm:text-lg lg:text-xl font-body max-w-2xl drop-shadow-lg"
 									// variants={itemVariants}
 								>
-									We merge creativity, technology, and
-									precision to design spaces that inspire
-									and endure.
+									Innovating architectural solutions,
+									crafting bespoke interiors, and expertly
+									managing projects for sustainable success.
 								</motion.p>
 							</motion.div>
 							<motion.h1
-								className={`text-6xl lg:pl-28 sm:text-7xl lg:text-[6.5rem] font-bold leading-tight ${
+								className={`text-6xl lg:pl-[10rem] sm:text-7xl lg:text-[6.5rem] font-bold leading-tight ${
 									raleway.className
 								} drop-shadow-lg ${
 									slide.textPosition === 'center'
@@ -464,10 +305,10 @@ const HeroSection: React.FC = () => {
 										: 'max-w-2xl'
 								}`}
 							>
-								Building
+								Shaping
 							</motion.h1>
 							<motion.h1
-								className={`text-5xl lg:pl-28 sm:text-6xl lg:text-7xl ${
+								className={`text-5xl lg:pl-[10rem] sm:text-6xl lg:text-7xl ${
 									pacifico.className
 								} font-semibold leading-tight drop-shadow-lg ${
 									slide.textPosition === 'center'
@@ -479,7 +320,7 @@ const HeroSection: React.FC = () => {
 							</motion.h1>
 							<motion.div
 								// variants={itemVariants}
-								className="mt-8 lg:ml-28"
+								className="mt-8 lg:ml-[10rem]"
 							>
 								<Link href={slide.ctaLink} passHref>
 									<motion.button
@@ -493,34 +334,6 @@ const HeroSection: React.FC = () => {
 								</Link>
 							</motion.div>
 						</motion.div>
-
-						{/* Conditional Scroll Cues */}
-						{activeSlide < heroSlides.length - 1 && (
-							<motion.div
-								className="absolute bottom-16 right-8 md:bottom-1/2 md:right-16 transform md:translate-y-1/2 flex flex-col items-center text-white z-30 opacity-70"
-								initial={{ opacity: 0, x: 20 }}
-								animate={{ opacity: 0.7, x: 0 }}
-								exit={{ opacity: 0, x: -20 }}
-								transition={{ duration: 0.5, delay: 1 }}
-							>
-								{isMobileView() ? (
-									<>
-										<RiArrowUpDoubleFill className="text-4xl md:text-5xl animate-bounce" />
-										<span className="mt-2 text-sm md:text-base font-body">
-											Swipe Up to continue
-										</span>
-									</>
-								) : (
-									<>
-										<RiMouseLine className="text-4xl md:text-5xl animate-bounce-vertical" />
-										<span className="mt-2 text-sm md:text-base font-body">
-											Scroll to continue
-										</span>
-										<RiArrowRightLine className="text-3xl mt-2 animate-pulse-arrow" />
-									</>
-								)}
-							</motion.div>
-						)}
 
 						{activeSlide === heroSlides.length - 1 && (
 							<motion.div
@@ -539,14 +352,16 @@ const HeroSection: React.FC = () => {
 					</div>
 				))}
 			</div>
-			<motion.div className="absolute bottom-40 md:bottom-20 w-[50%] md:w-[25%] right-0 md:right-10 z-20">
+			<motion.div className="absolute bottom-44 md:bottom-20 w-[50%] md:w-[25%] right-0 md:right-10 z-20">
 				<motion.p
 					className="mt-4 text-base sm:text-lg text-white text-left lg:text-xl font-body max-w-2xl drop-shadow-lg"
 					// variants={itemVariants}
 				>
-					From residential masterpieces to commercial
-					landmarks, our approach combines beauty with
-					functionality.
+					<span className="font-bold text-[1.3rem] sm:text-[1.3rem] lg:text-[1.45rem]">
+						Beyond Blueprints
+					</span>{' '}
+					<br />
+					Our approach combines beauty with functionality.
 				</motion.p>
 			</motion.div>
 
