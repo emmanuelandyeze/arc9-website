@@ -51,8 +51,8 @@ const config: Config = {
 					'var(--font-pacifico)',
 					...defaultTheme.fontFamily.sans,
 				],
-				pacifico: [
-					'var(--font-pacifico)',
+				kranky: [
+					'var(--font-kranky)',
 					...defaultTheme.fontFamily.sans,
 				],
 			},

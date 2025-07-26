@@ -2,18 +2,11 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import {
-	Outfit,
-	Inter,
+	Kranky,
 	Raleway,
 	Pacifico,
 } from 'next/font/google';
 import Layout from '@/components/Layout'; // Import the Layout component
-
-const outfit = Outfit({
-	subsets: ['latin'],
-	display: 'swap',
-	variable: '--font-outfit',
-});
 
 const raleway = Raleway({
 	subsets: ['latin'],
@@ -21,17 +14,18 @@ const raleway = Raleway({
 	variable: '--font-raleway',
 });
 
-const inter = Inter({
-	subsets: ['latin'],
-	display: 'swap',
-	variable: '--font-inter',
-});
-
 const pacifico = Pacifico({
 	weight: '400',
 	subsets: ['latin'],
 	display: 'swap',
 	variable: '--font-pacifico',
+});
+
+const kranky = Kranky({
+	weight: '400',
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-kranky',
 });
 
 export const metadata: Metadata = {
@@ -49,7 +43,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			className={`${pacifico.variable} ${raleway.variable}`}
+			className={`${pacifico.variable} ${kranky.variable} ${raleway.variable}`}
 		>
 			<body className="font-body text-neutral-800 bg-neutral-50 antialiased">
 				<Layout>

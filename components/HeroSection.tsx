@@ -94,7 +94,7 @@ const pacifico = Pacifico({
 	variable: '--font-pacifico',
 });
 
-const raleway = Kranky({
+const kranky = Kranky({
 	weight: '400',
 	subsets: ['latin'],
 	display: 'swap',
@@ -297,9 +297,7 @@ const HeroSection: React.FC = () => {
 								</motion.p>
 							</motion.div>
 							<motion.h1
-								className={`text-6xl lg:pl-[10rem] sm:text-7xl lg:text-[6.5rem] font-bold leading-tight ${
-									raleway.className
-								} drop-shadow-lg ${
+								className={`text-6xl lg:pl-[10rem] sm:text-7xl lg:text-[6.5rem] font-bold leading-tight font-kranky drop-shadow-lg ${
 									slide.textPosition === 'center'
 										? 'max-w-3xl'
 										: 'max-w-2xl'

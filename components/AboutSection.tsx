@@ -17,7 +17,7 @@ const AboutSection = () => {
 					unparalleled client satisfaction.
 				</p>
 			</div>
-			<div className="w-full flex justify-center items-center">
+			{/* <div className="w-full md:w-[50%] flex justify-center items-center">
 				<Image
 					src={'/images/projects/v2.png'}
 					alt={'Arc9 Consult Building Image'}
@@ -25,7 +25,7 @@ const AboutSection = () => {
 					height={700}
 					className="rounded-2xl w-full max-w-md md:max-w-full object-cover border-white/20 transform hover:scale-105 transition-transform duration-300 ease-in-out"
 				/>
-			</div>
+			</div> */}
 		</section>
 	);
 };
