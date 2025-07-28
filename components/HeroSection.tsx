@@ -21,6 +21,8 @@ import {
 	Raleway,
 	Open_Sans,
 	Kranky,
+	Lora,
+	Playfair_Display,
 } from 'next/font/google';
 
 // Helper to check if it's a mobile view (Tailwind's 'md' breakpoint)
@@ -94,11 +96,18 @@ const pacifico = Pacifico({
 	variable: '--font-pacifico',
 });
 
-const kranky = Kranky({
+const lora = Lora({
 	weight: '400',
 	subsets: ['latin'],
 	display: 'swap',
-	variable: '--font-raleway',
+	variable: '--font-lora',
+});
+
+const playfair = Playfair_Display({
+	weight: '400',
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-playfair',
 });
 
 // Background images for the carousel
@@ -297,25 +306,11 @@ const HeroSection: React.FC = () => {
 								</motion.p>
 							</motion.div>
 							<motion.h1
-								className={`text-6xl lg:pl-[10rem] sm:text-7xl lg:text-[6.5rem] font-bold leading-tight font-kranky drop-shadow-lg ${
-									slide.textPosition === 'center'
-										? 'max-w-3xl'
-										: 'max-w-2xl'
-								}`}
+								className={`text-6xl w-full lg:pl-[10rem] sm:text-7xl lg:text-[6.5rem] font-bold leading-tight drop-shadow-lg ${playfair.className} `}
 							>
-								Shaping
+								Designing the future...
 							</motion.h1>
-							<motion.h1
-								className={`text-5xl lg:pl-[10rem] sm:text-6xl lg:text-7xl ${
-									pacifico.className
-								} font-semibold leading-tight drop-shadow-lg ${
-									slide.textPosition === 'center'
-										? 'max-w-3xl'
-										: 'max-w-2xl'
-								}`}
-							>
-								the future
-							</motion.h1>
+
 							<motion.div
 								// variants={itemVariants}
 								className="mt-8 lg:ml-[10rem]"
