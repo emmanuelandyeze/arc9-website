@@ -236,7 +236,7 @@ const HeroSection: React.FC = () => {
 								objectFit: 'cover',
 								objectPosition: 'center',
 							}}
-							priority={activeImage === 0}
+							priority={true}
 						/>
 						<div className="absolute inset-0 bg-black/50" />{' '}
 						{/* Overlay for text readability */}
