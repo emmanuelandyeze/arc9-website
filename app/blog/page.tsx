@@ -201,7 +201,7 @@ const BlogPage = () => {
 				className={`relative h-[55vh] flex items-center justify-center text-center bg-cover bg-center`}
 				style={{
 					backgroundImage:
-						'url(/images/projects/GYM 3.png)',
+						'url(/images/projects/service2.png)',
 				}} // Add a dedicated hero image for blog
 			>
 				<div className="absolute inset-0 bg-black/60"></div>

@@ -366,7 +366,7 @@ const ProjectsPage = () => {
 														color: '#9C110E',
 													}}
 													whileTap={{ scale: 0.95 }}
-													className={`px-6 py-3 text-base font-sans font-medium rounded-full shadow-md bg-[#9c100e20] border border-[#9c100eb6] text-white transition-all duration-300 ease-in-out hover:shadow-lg ${work_sans.className}`}
+													className={`px-6 py-3 text-base font-sans font-medium rounded-full shadow-md bg-[#9c100e20] border border-[#f1f1f1] text-white transition-all duration-300 ease-in-out hover:shadow-lg ${work_sans.className}`}
 													style={{
 														backdropFilter: 'blur(10px)',
 													}}
