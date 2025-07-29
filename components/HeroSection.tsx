@@ -18,11 +18,8 @@ import {
 import { FaCircleArrowRight } from 'react-icons/fa6';
 import {
 	Pacifico,
-	Raleway,
-	Open_Sans,
-	Kranky,
-	Lora,
 	Playfair_Display,
+	Work_Sans,
 } from 'next/font/google';
 
 // Helper to check if it's a mobile view (Tailwind's 'md' breakpoint)
@@ -96,11 +93,11 @@ const pacifico = Pacifico({
 	variable: '--font-pacifico',
 });
 
-const lora = Lora({
+const work_sans = Work_Sans({
 	weight: '400',
 	subsets: ['latin'],
 	display: 'swap',
-	variable: '--font-lora',
+	variable: '--font-worksans',
 });
 
 const playfair = Playfair_Display({
@@ -112,7 +109,7 @@ const playfair = Playfair_Display({
 
 // Background images for the carousel
 const backgroundImages = [
-	'/images/projects/GA 3.png',
+	'/images/projects/landing2.png',
 	'/images/projects/v2.png',
 	'/images/projects/Living room 2.jpg',
 	'/images/projects/GYM 3.png',
@@ -297,7 +294,7 @@ const HeroSection: React.FC = () => {
 						>
 							<motion.div className="w-[100%] md:w-[60%]">
 								<motion.p
-									className="mb-14 md:mb-[3.5rem] text-base  sm:text-lg lg:text-xl font-body max-w-2xl drop-shadow-lg"
+									className={`mb-14 md:mb-[3.5rem] text-base  sm:text-lg lg:text-xl font-body max-w-2xl drop-shadow-lg ${work_sans.className}`}
 									// variants={itemVariants}
 								>
 									Innovating architectural solutions,
@@ -317,7 +314,7 @@ const HeroSection: React.FC = () => {
 							>
 								<Link href={slide.ctaLink} passHref>
 									<motion.button
-										className="bg-white/10 backdrop-blur-md border border-white/20 text-white/90 hover:bg-white/20 px-6 py-3 rounded-full text-lg font-body flex items-center gap-2 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/30"
+										className="bg-white/10 backdrop-blur-md border cursor-pointer border-white/20 text-white/90 hover:bg-white/20 px-6 py-3 rounded-full text-lg font-body flex items-center gap-2 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/30"
 										whileHover={{ scale: 1.05 }}
 										whileTap={{ scale: 0.95 }}
 									>

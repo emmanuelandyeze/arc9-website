@@ -1,6 +1,7 @@
 // src/components/Layout.tsx
 import React from 'react';
 import Navbar from '@/components/Navbar';
+import Footer from './Footer';
 // import Footer from './Footer'; // We'll create this later
 
 interface LayoutProps {
@@ -13,8 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 			<Navbar />
 			{/* Main content area, takes up remaining vertical space */}
 			<main className=" ">{children}</main>
-			{/* <Footer /> */}{' '}
-			{/* The footer, will be added later */}
+			<Footer /> {/* The footer, will be added later */}
 		</div>
 	);
 };

@@ -108,10 +108,11 @@ const Navbar: React.FC = () => {
 	}, [isOpen]);
 
 	const navLinks = [
-		{ name: 'Projects', href: '/projects' },
 		{ name: 'About us', href: '/about' },
-		{ name: 'Blog', href: '/blog' },
+
 		{ name: 'Services', href: '/services' },
+		{ name: 'Projects', href: '/projects' },
+		{ name: 'Blog', href: '/blog' },
 	];
 
 	const modalVariants = {
