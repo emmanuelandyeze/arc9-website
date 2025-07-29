@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react'; // useMemo for memoizing post lookup
+import React, { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
 	Playfair_Display,
@@ -147,29 +147,22 @@ const getBlogPostBySlug = (
 const SingleBlogPostPage = ({
 	params,
 }: {
-	params: { slug: string };
+	params: { slug: string }; // This is the correct and sufficient type
 }) => {
 	const { slug } = params;
 
-	// Use useMemo to prevent re-calculating `post` on every re-render
-	// unless the slug changes.
 	const post = useMemo(
 		() => getBlogPostBySlug(slug),
 		[slug],
 	);
 
-	// This useEffect is more for client-side effects, if any, when the post loads.
-	// The main data fetching is handled synchronously here for mock data.
 	useEffect(() => {
 		if (post) {
-			// You could log a view, or trigger a specific animation on post content elements
-			// if they were separate motion.divs
 			console.log(`Blog post "${post.title}" viewed.`);
 		}
-	}, [post]); // Dependency on post ensures it runs when post data is available/changes
+	}, [post]);
 
 	if (!post) {
-		// Handle case where post is not found
 		return (
 			<main className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-16">
 				<div className="text-center">
@@ -215,7 +208,7 @@ const SingleBlogPostPage = ({
 					<p
 						className={`text-lg uppercase tracking-widest mb-2 text-[#fff] ${work_sans.className}`}
 					>
-						{post.tags.join(' • ')} {/* Display tags */}
+						{post.tags.join(' • ')}
 					</p>
 					<h1
 						className={`text-5xl sm:text-6xl md:text-7xl font-extrabold leading-tight mb-4 ${playfair.className}`}
@@ -241,13 +234,6 @@ const SingleBlogPostPage = ({
 						transition={{ duration: 0.8, delay: 0.4 }}
 						className={`prose prose-lg max-w-none ${work_sans.className} text-gray-800`}
 					>
-						{/*
-                            WARNING: Using dangerouslySetInnerHTML is generally discouraged
-                            due to XSS vulnerabilities if content is not sanitized.
-                            For production, especially with user-generated content,
-                            you should sanitize the HTML or use a Markdown renderer.
-                            Tailwind's @tailwindcss/typography plugin helps style this content.
-                        */}
 						<div
 							dangerouslySetInnerHTML={{
 								__html: post.content,
@@ -287,7 +273,7 @@ const SingleBlogPostPage = ({
 							<motion.button
 								whileHover={{
 									scale: 1.05,
-									backgroundColor: '#bfdbfe', // Light blue hover
+									backgroundColor: '#bfdbfe',
 								}}
 								whileTap={{ scale: 0.95 }}
 								className={`px-8 py-3 bg-blue-100 border border-blue-200 text-blue-700 rounded-full shadow-lg hover:shadow-xl transition duration-300 ease-in-out text-lg font-semibold ${work_sans.className}`}
