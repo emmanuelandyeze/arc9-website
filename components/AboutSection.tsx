@@ -79,15 +79,17 @@ const AboutSection = () => {
 						}}
 						className="w-full h-auto object-cover transform transition-transform duration-700 hover:scale-105"
 					/> */}
-					<img
-						src="/images/projects/plan.jpg"
+					<Image
+						src={'/images/projects/plan.jpg'}
 						alt="Full view"
-						className="max-w-full max-h-full object-contain"
-						style={{
-							touchAction: 'pinch-zoom',
-							width: 'auto',
-							height: 'auto',
-						}}
+						// className="max-w-full max-h-full object-contain"
+						// style={{
+						// 	touchAction: 'pinch-zoom',
+						// }}
+						width={1200}
+						height={800}
+						// sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+						priority={true}
 					/>
 					{/* Overlay Text */}
 					<div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
@@ -156,15 +158,16 @@ const AboutSection = () => {
 						>
 							&times;
 						</button>
-						<img
+						<Image
 							src="/images/projects/plan.jpg"
 							alt="Full view"
 							className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
 							style={{
 								touchAction: 'pinch-zoom',
-								width: 'auto',
-								height: 'auto',
 							}}
+							width={1200}
+							height={800}
+							priority={true}
 						/>
 					</div>
 				</div>

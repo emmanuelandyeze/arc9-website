@@ -173,6 +173,7 @@ const Navbar: React.FC = () => {
 							alt={'Arc9 Consult Logo'}
 							width={150}
 							height={150}
+							priority={true}
 						/>
 					) : (
 						<Image
@@ -180,6 +181,7 @@ const Navbar: React.FC = () => {
 							alt={'Arc9 Consult Logo'}
 							width={150}
 							height={150}
+							priority={true}
 						/>
 					)}
 				</Link>

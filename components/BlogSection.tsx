@@ -5,6 +5,7 @@ import {
 	Playfair_Display,
 	Work_Sans,
 } from 'next/font/google';
+import Image from 'next/image';
 
 const playfair = Playfair_Display({
 	weight: ['400', '700'],
@@ -109,10 +110,12 @@ const BlogSection = () => {
 								}}
 								className="relative"
 							>
-								<img
+								<Image
 									src={post.imageUrl}
 									alt={post.title}
 									className="w-full h-64 object-cover"
+									width={1200}
+									height={800}
 								/>
 								<div
 									className="absolute inset-0 bg-blue-100 bg-opacity-20 -z-10 transform translate-x-2 translate-y-2 rounded-xl"

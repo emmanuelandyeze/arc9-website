@@ -10,6 +10,7 @@ import {
 	PencilRuler,
 	Briefcase,
 } from 'lucide-react';
+import Image from 'next/image';
 
 const playfair = Playfair_Display({
 	weight: ['400', '700'],
@@ -121,10 +122,13 @@ const ServicesSection = () => {
 									}}
 									className="relative z-10 overflow-hidden rounded-xl shadow-lg"
 								>
-									<img
+									<Image
 										src={service.imageUrl}
 										alt={service.title}
-										className="w-full h-auto max-h-96 md:max-h-[36rem] object-cover rounded-xl"
+										className=" max-h-96 md:max-h-[36rem] object-cover rounded-xl"
+										width={1200}
+										height={800}
+										priority={true}
 									/>
 								</motion.div>
 								{/* Background Accent */}
