@@ -175,7 +175,6 @@ const SingleBlogPostPage = ({ params }) => {
 
 	return (
 		<main className="bg-white text-gray-900">
-			{/* Hero Section: Main Blog Post Image & Title */}
 			<section
 				className="relative h-[60vh] md:h-[70vh] flex items-end justify-start bg-cover bg-center"
 				style={{ backgroundImage: `url(${post.imageUrl})` }}
