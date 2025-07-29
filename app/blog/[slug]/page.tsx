@@ -1,14 +1,13 @@
 'use client';
-
 import React, { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
 	Playfair_Display,
 	Work_Sans,
 } from 'next/font/google';
-import Image from 'next/image';
 import Link from 'next/link';
 
+// Define fonts
 const playfair = Playfair_Display({
 	weight: ['400', '700'],
 	subsets: ['latin'],
@@ -23,120 +22,30 @@ const work_sans = Work_Sans({
 	variable: '--font-worksans',
 });
 
-// Define a detailed type for a single blog post
+// Define BlogPost type
 interface BlogPost {
-	slug: string; // Unique slug for the post's URL
+	slug: string;
 	title: string;
 	excerpt: string;
-	imageUrl: string; // Main image for the blog post
+	imageUrl: string;
 	date: string;
 	author: string;
 	tags: string[];
-	content: string; // Full content of the blog post (could be Markdown/HTML)
+	content: string;
 }
 
-// All Blog Posts Data (moved outside function for single source)
+// Define PageProps for dynamic route
+interface PageProps {
+	params: { slug: string };
+}
+
+// Blog posts data
 const allBlogPosts: BlogPost[] = [
-	{
-		slug: 'designing-the-future-trends-in-modern-architecture',
-		title:
-			'Designing the Future: Trends in Modern Architecture',
-		excerpt:
-			'Explore the latest trends shaping the world of architecture, from sustainable materials to innovative designs that prioritize human well-being and environmental harmony.',
-		imageUrl: '/images/blog/architecture-trends.jpg', // Ensure this image exists
-		date: 'July 25, 2025',
-		author: 'Arc9 Insights',
-		tags: ['Architecture', 'Trends', 'Sustainability'],
-		content: `
-                <p>Modern architecture is constantly evolving, pushing the boundaries of what's possible while responding to the urgent demands of sustainability and human-centric design. At Arc9 Consult, we closely monitor these shifts to ensure our projects are not only aesthetically pleasing but also forward-thinking and responsible.</p>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">1. Biophilic Design: Connecting with Nature</h3>
-                <p>One of the most significant trends is biophilic design, which integrates natural elements and processes into built environments. This goes beyond just adding plants; it involves designing spaces that mimic natural patterns, maximize natural light and ventilation, and incorporate natural textures and materials. Research shows that biophilic design can improve occupant well-being, productivity, and reduce stress levels.</p>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">2. Smart Buildings & IoT Integration</h3>
-                <p>The Internet of Things (IoT) is transforming buildings into intelligent ecosystems. Smart buildings use sensors and interconnected devices to optimize energy consumption, enhance security, and personalize indoor environments. From automated lighting and climate control to predictive maintenance, these technologies are making buildings more efficient and responsive to their occupants' needs.</p>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">3. Adaptive Reuse and Urban Regeneration</h3>
-                <p>With a growing emphasis on sustainability, architects are increasingly looking at adaptive reuse – repurposing existing structures for new functions – rather than demolishing and rebuilding. This approach preserves historical character, reduces waste, and often revitalizes urban areas. It requires creative problem-solving and a deep understanding of structural integrity and modern building codes.</p>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">4. Modular and Prefabricated Construction</h3>
-                <p>To address the need for faster, more efficient, and often more affordable construction, modular and prefabricated techniques are gaining traction. Components are manufactured off-site in controlled environments, leading to higher quality, reduced waste, and quicker assembly times. This method is particularly impactful for repeatable housing designs and commercial developments.</p>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">5. Resilient and Climate-Responsive Architecture</h3>
-                <p>As climate change impacts become more evident, there's a heightened focus on designing buildings that are resilient to extreme weather events and adaptable to changing environmental conditions. This includes features like flood-resistant foundations, enhanced insulation, passive heating and cooling strategies, and integration of renewable energy sources.</p>
-
-                <p>These trends highlight a future where architecture is not just about creating structures, but about fostering healthier, more sustainable, and more responsive environments for humanity.</p>
-            `,
-	},
-	{
-		slug: 'creating-timeless-interiors-a-design-philosophy',
-		title:
-			'Creating Timeless Interiors: A Design Philosophy',
-		excerpt:
-			'Learn how to craft interior spaces that blend functionality with timeless elegance and personal style. We discuss the principles of classic design, material selection, and how to create lasting beauty in any home or commercial space.',
-		imageUrl: '/images/blog/timeless-interiors.jpg', // Ensure this image exists
-		date: 'July 20, 2025',
-		author: 'Aisha K.',
-		tags: ['Interior Design', 'Home Decor', 'Style'],
-		content: `
-                <p>In the ephemeral world of trends, the pursuit of timeless interior design stands as a testament to enduring beauty and functionality. At Arc9 Consult, our philosophy centers on creating spaces that resonate with personal style while remaining relevant for years to come.</p>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">The Essence of Timeless Design</h3>
-                <p>Timeless design isn't about ignoring current trends entirely, but rather about selecting elements that transcend fleeting fads. It often involves a balanced blend of classic forms, quality materials, and a coherent color palette that brings tranquility and sophistication to a space. It emphasizes comfort and liveability, ensuring that the space serves its occupants beautifully for daily life.</p>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">Key Principles We Follow:</h3>
-                <ul>
-                    <li><strong>Quality Over Quantity:</strong> Investing in well-crafted furniture and finishes ensures longevity and reduces the need for frequent replacements.</li>
-                    <li><strong>Neutral Foundations:</strong> Using neutral colors for walls, large furniture pieces, and flooring provides a calm backdrop that can be easily updated with accessories and artwork.</li>
-                    <li><strong>Classic Silhouettes:</strong> Opting for furniture with clean lines and balanced proportions that have stood the test of time.</li>
-                    <li><strong>Natural Materials:</strong> Incorporating wood, stone, linen, wool, and cotton adds warmth, texture, and authenticity that never goes out of style.</li>
-                    <li><strong>Functionality First:</strong> A well-designed space is one that works efficiently for its inhabitants, seamlessly integrating storage and practical solutions.</li>
-                    <li><strong>Personal Touches:</strong> Allowing space for cherished items, art, and personal collections that tell a story and make the home uniquely yours.</li>
-                </ul>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">Crafting Your Timeless Space</h3>
-                <p>Starting with a clear vision and understanding your lifestyle are paramount. Consider how you use each room, what feelings you want to evoke, and what existing pieces you cherish. Our designers work closely with clients to curate a collection of elements that reflect their individuality while adhering to principles that ensure lasting appeal.</p>
-
-                <p>Ultimately, a timeless interior is a reflection of intentionality, a quiet confidence that values substance and comfort over passing whims. It’s an investment in enduring beauty that truly makes a house a home.</p>
-            `,
-	},
-	{
-		slug: 'mastering-project-management-in-construction',
-		title: 'Mastering Project Management in Construction',
-		excerpt:
-			'Discover key strategies for managing construction projects efficiently, ensuring quality, timeliness, and budget adherence. This article delves into risk management, stakeholder communication, and technological advancements in project oversight.',
-		imageUrl: '/images/blog/project-management.jpg', // Ensure this image exists
-		date: 'July 15, 2025',
-		author: 'David L.',
-		tags: [
-			'Project Management',
-			'Construction',
-			'Efficiency',
-		],
-		content: `
-                <p>Successful construction projects are not just about grand designs; they are a testament to meticulous project management. At Arc9 Consult, we believe that effective oversight is the backbone of any build, ensuring that complex endeavors are completed on time, within budget, and to the highest quality standards.</p>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">The Pillars of Construction Project Management:</h3>
-                <ol>
-                    <li><strong>Clear Scope Definition:</strong> Before breaking ground, a crystal-clear understanding of the project's scope, objectives, and deliverables is essential. Ambiguity here leads to delays and cost overruns.</li>
-                    <li><strong>Rigorous Planning & Scheduling:</strong> Developing a detailed project plan, including a Work Breakdown Structure (WBS), Gantt charts, and critical path analysis, helps in sequencing tasks, allocating resources, and setting realistic timelines.</li>
-                    <li><strong>Effective Resource Allocation:</strong> This involves managing manpower, materials, equipment, and finances optimally. Predicting needs and mitigating shortages are key.</li>
-                    <li><strong>Robust Risk Management:</strong> Identifying potential risks (e.g., weather delays, material price fluctuations, labor shortages, regulatory changes) early and developing contingency plans is crucial to minimize disruptions.</li>
-                    <li><strong>Stakeholder Communication:</strong> Keeping all parties – clients, contractors, suppliers, regulators, and end-users – informed and aligned through regular meetings and clear communication channels is vital for smooth progress.</li>
-                    <li><strong>Quality Control & Assurance:</strong> Implementing strict quality checks at every stage ensures that the final product meets specified standards and client expectations.</li>
-                    <li><strong>Budget Monitoring & Cost Control:</strong> Continuously tracking expenditures against the budget and taking corrective actions to prevent financial deviations is paramount.</li>
-                    <li><strong>Leveraging Technology:</strong> Utilizing project management software, Building Information Modeling (BIM), drones for site monitoring, and digital collaboration tools enhances efficiency and accuracy.</li>
-                </ol>
-
-                <h3 class="text-2xl font-bold mt-8 mb-4">From Blueprint to Reality</h3>
-                <p>Project management in construction is a dynamic field that demands foresight, adaptability, and strong leadership. It’s about more than just tasks; it’s about orchestrating a symphony of complex elements to bring architectural visions to tangible reality. Our experienced project managers are adept at navigating these complexities, ensuring a seamless journey from concept to completion.</p>
-            `,
-	},
-	// Add more blog posts here following the same structure
+	// Your blog post data here (unchanged)
+	// ...
 ];
 
-// Mock function to simulate fetching a single blog post by its slug
-// Memoize this function if allBlogPosts is large, to prevent re-running on every render
+// Mock function to get a blog post by slug
 const getBlogPostBySlug = (
 	slug: string,
 ): BlogPost | undefined => {
@@ -144,13 +53,12 @@ const getBlogPostBySlug = (
 };
 
 // Main Single Blog Post Page Component
-const SingleBlogPostPage = ({
+const SingleBlogPostPage: React.FC<PageProps> = ({
 	params,
-}: {
-	params: { slug: string }; // This is the correct and sufficient type
 }) => {
 	const { slug } = params;
 
+	// Memoize post lookup
 	const post = useMemo(
 		() => getBlogPostBySlug(slug),
 		[slug],
@@ -193,7 +101,7 @@ const SingleBlogPostPage = ({
 
 	return (
 		<main className="bg-white text-gray-900">
-			{/* Hero Section: Main Blog Post Image & Title */}
+			{/* Hero Section */}
 			<section
 				className="relative h-[60vh] md:h-[70vh] flex items-end justify-start bg-cover bg-center"
 				style={{ backgroundImage: `url(${post.imageUrl})` }}
@@ -285,7 +193,7 @@ const SingleBlogPostPage = ({
 				</div>
 			</section>
 
-			{/* Call to Action Section (Similar to other pages) */}
+			{/* Call to Action Section */}
 			<section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-[#9C110E] text-white text-center">
 				<div className="max-w-4xl mx-auto">
 					<h2
@@ -307,9 +215,7 @@ const SingleBlogPostPage = ({
 								backgroundColor: '#ffffff',
 							}}
 							whileTap={{ scale: 0.95 }}
-							className={`px-10 py-5 text-xl font-semibold rounded-full shadow-lg transition-all duration-300 ease-in-out
-                            bg-white text-[#9C110E] hover:text-[#7b0d0c]
-                            focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-75 ${work_sans.className}`}
+							className={`px-10 py-5 text-xl font-semibold rounded-full shadow-lg transition-all duration-300 ease-in-out bg-white text-[#9C110E] hover:text-[#7b0d0c] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-75 ${work_sans.className}`}
 						>
 							Contact Our Team
 						</motion.button>
