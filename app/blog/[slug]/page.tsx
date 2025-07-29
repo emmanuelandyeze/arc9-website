@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react'; // useMemo for memoizing post lookup
 import { motion } from 'framer-motion';
 import {
 	Playfair_Display,
@@ -35,23 +35,19 @@ interface BlogPost {
 	content: string; // Full content of the blog post (could be Markdown/HTML)
 }
 
-// Mock function to simulate fetching a single blog post by its slug
-// In a real application, you'd fetch this from a CMS, database, or API
-const getBlogPostBySlug = (
-	slug: string,
-): BlogPost | undefined => {
-	const allBlogPosts: BlogPost[] = [
-		{
-			slug: 'designing-the-future-trends-in-modern-architecture',
-			title:
-				'Designing the Future: Trends in Modern Architecture',
-			excerpt:
-				'Explore the latest trends shaping the world of architecture, from sustainable materials to innovative designs that prioritize human well-being and environmental harmony.',
-			imageUrl: '/images/blog/architecture-trends.jpg', // Ensure this image exists
-			date: 'July 25, 2025',
-			author: 'Arc9 Insights',
-			tags: ['Architecture', 'Trends', 'Sustainability'],
-			content: `
+// All Blog Posts Data (moved outside function for single source)
+const allBlogPosts: BlogPost[] = [
+	{
+		slug: 'designing-the-future-trends-in-modern-architecture',
+		title:
+			'Designing the Future: Trends in Modern Architecture',
+		excerpt:
+			'Explore the latest trends shaping the world of architecture, from sustainable materials to innovative designs that prioritize human well-being and environmental harmony.',
+		imageUrl: '/images/blog/architecture-trends.jpg', // Ensure this image exists
+		date: 'July 25, 2025',
+		author: 'Arc9 Insights',
+		tags: ['Architecture', 'Trends', 'Sustainability'],
+		content: `
                 <p>Modern architecture is constantly evolving, pushing the boundaries of what's possible while responding to the urgent demands of sustainability and human-centric design. At Arc9 Consult, we closely monitor these shifts to ensure our projects are not only aesthetically pleasing but also forward-thinking and responsible.</p>
 
                 <h3 class="text-2xl font-bold mt-8 mb-4">1. Biophilic Design: Connecting with Nature</h3>
@@ -71,18 +67,18 @@ const getBlogPostBySlug = (
 
                 <p>These trends highlight a future where architecture is not just about creating structures, but about fostering healthier, more sustainable, and more responsive environments for humanity.</p>
             `,
-		},
-		{
-			slug: 'creating-timeless-interiors-a-design-philosophy',
-			title:
-				'Creating Timeless Interiors: A Design Philosophy',
-			excerpt:
-				'Learn how to craft interior spaces that blend functionality with timeless elegance and personal style. We discuss the principles of classic design, material selection, and how to create lasting beauty in any home or commercial space.',
-			imageUrl: '/images/blog/timeless-interiors.jpg', // Ensure this image exists
-			date: 'July 20, 2025',
-			author: 'Aisha K.',
-			tags: ['Interior Design', 'Home Decor', 'Style'],
-			content: `
+	},
+	{
+		slug: 'creating-timeless-interiors-a-design-philosophy',
+		title:
+			'Creating Timeless Interiors: A Design Philosophy',
+		excerpt:
+			'Learn how to craft interior spaces that blend functionality with timeless elegance and personal style. We discuss the principles of classic design, material selection, and how to create lasting beauty in any home or commercial space.',
+		imageUrl: '/images/blog/timeless-interiors.jpg', // Ensure this image exists
+		date: 'July 20, 2025',
+		author: 'Aisha K.',
+		tags: ['Interior Design', 'Home Decor', 'Style'],
+		content: `
                 <p>In the ephemeral world of trends, the pursuit of timeless interior design stands as a testament to enduring beauty and functionality. At Arc9 Consult, our philosophy centers on creating spaces that resonate with personal style while remaining relevant for years to come.</p>
 
                 <h3 class="text-2xl font-bold mt-8 mb-4">The Essence of Timeless Design</h3>
@@ -103,21 +99,21 @@ const getBlogPostBySlug = (
 
                 <p>Ultimately, a timeless interior is a reflection of intentionality, a quiet confidence that values substance and comfort over passing whims. It’s an investment in enduring beauty that truly makes a house a home.</p>
             `,
-		},
-		{
-			slug: 'mastering-project-management-in-construction',
-			title: 'Mastering Project Management in Construction',
-			excerpt:
-				'Discover key strategies for managing construction projects efficiently, ensuring quality, timeliness, and budget adherence. This article delves into risk management, stakeholder communication, and technological advancements in project oversight.',
-			imageUrl: '/images/blog/project-management.jpg', // Ensure this image exists
-			date: 'July 15, 2025',
-			author: 'David L.',
-			tags: [
-				'Project Management',
-				'Construction',
-				'Efficiency',
-			],
-			content: `
+	},
+	{
+		slug: 'mastering-project-management-in-construction',
+		title: 'Mastering Project Management in Construction',
+		excerpt:
+			'Discover key strategies for managing construction projects efficiently, ensuring quality, timeliness, and budget adherence. This article delves into risk management, stakeholder communication, and technological advancements in project oversight.',
+		imageUrl: '/images/blog/project-management.jpg', // Ensure this image exists
+		date: 'July 15, 2025',
+		author: 'David L.',
+		tags: [
+			'Project Management',
+			'Construction',
+			'Efficiency',
+		],
+		content: `
                 <p>Successful construction projects are not just about grand designs; they are a testament to meticulous project management. At Arc9 Consult, we believe that effective oversight is the backbone of any build, ensuring that complex endeavors are completed on time, within budget, and to the highest quality standards.</p>
 
                 <h3 class="text-2xl font-bold mt-8 mb-4">The Pillars of Construction Project Management:</h3>
@@ -135,9 +131,15 @@ const getBlogPostBySlug = (
                 <h3 class="text-2xl font-bold mt-8 mb-4">From Blueprint to Reality</h3>
                 <p>Project management in construction is a dynamic field that demands foresight, adaptability, and strong leadership. It’s about more than just tasks; it’s about orchestrating a symphony of complex elements to bring architectural visions to tangible reality. Our experienced project managers are adept at navigating these complexities, ensuring a seamless journey from concept to completion.</p>
             `,
-		},
-		// Add more blog posts here following the same structure
-	];
+	},
+	// Add more blog posts here following the same structure
+];
+
+// Mock function to simulate fetching a single blog post by its slug
+// Memoize this function if allBlogPosts is large, to prevent re-running on every render
+const getBlogPostBySlug = (
+	slug: string,
+): BlogPost | undefined => {
 	return allBlogPosts.find((post) => post.slug === slug);
 };
 
@@ -148,14 +150,23 @@ const SingleBlogPostPage = ({
 	params: { slug: string };
 }) => {
 	const { slug } = params;
-	const post = getBlogPostBySlug(slug);
 
-	// Initial animation for the content
+	// Use useMemo to prevent re-calculating `post` on every re-render
+	// unless the slug changes.
+	const post = useMemo(
+		() => getBlogPostBySlug(slug),
+		[slug],
+	);
+
+	// This useEffect is more for client-side effects, if any, when the post loads.
+	// The main data fetching is handled synchronously here for mock data.
 	useEffect(() => {
 		if (post) {
-			// Can add more specific animations for elements within the content
+			// You could log a view, or trigger a specific animation on post content elements
+			// if they were separate motion.divs
+			console.log(`Blog post "${post.title}" viewed.`);
 		}
-	}, [post]);
+	}, [post]); // Dependency on post ensures it runs when post data is available/changes
 
 	if (!post) {
 		// Handle case where post is not found
@@ -173,7 +184,7 @@ const SingleBlogPostPage = ({
 						The article you are looking for does not exist
 						or has been moved.
 					</p>
-					<Link href="/blog">
+					<Link href="/blog" passHref>
 						<motion.button
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
@@ -235,6 +246,7 @@ const SingleBlogPostPage = ({
                             due to XSS vulnerabilities if content is not sanitized.
                             For production, especially with user-generated content,
                             you should sanitize the HTML or use a Markdown renderer.
+                            Tailwind's @tailwindcss/typography plugin helps style this content.
                         */}
 						<div
 							dangerouslySetInnerHTML={{
@@ -275,7 +287,7 @@ const SingleBlogPostPage = ({
 							<motion.button
 								whileHover={{
 									scale: 1.05,
-									backgroundColor: '#bfdbfe',
+									backgroundColor: '#bfdbfe', // Light blue hover
 								}}
 								whileTap={{ scale: 0.95 }}
 								className={`px-8 py-3 bg-blue-100 border border-blue-200 text-blue-700 rounded-full shadow-lg hover:shadow-xl transition duration-300 ease-in-out text-lg font-semibold ${work_sans.className}`}

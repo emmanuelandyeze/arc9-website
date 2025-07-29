@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import {
+	motion,
+	AnimatePresence,
+	useAnimation,
+} from 'framer-motion'; // Import AnimatePresence
 import {
 	Playfair_Display,
 	Work_Sans,
 } from 'next/font/google';
 import Image from 'next/image';
-import Link from 'next/link'; // Import Link for internal navigation
+import Link from 'next/link';
 
 const playfair = Playfair_Display({
 	weight: ['400', '700'],
@@ -168,28 +172,32 @@ const allProjects: Project[] = [
 ];
 
 const ProjectsPage = () => {
-	const controls = useAnimation();
+	// For hero section animation
+	const heroControls = useAnimation();
+
 	const [selectedCategory, setSelectedCategory] =
 		useState('All');
 	const [filteredProjects, setFilteredProjects] = useState<
 		Project[]
 	>([]);
 
+	// Dynamically get categories from allProjects
 	const categories = [
 		'All',
 		...new Set(allProjects.map((p) => p.category)),
 	];
 
+	// Initial animation for the hero section
 	useEffect(() => {
-		// Initial animation for the header
-		controls.start({
+		heroControls.start({
 			opacity: 1,
 			y: 0,
-			transition: { duration: 0.6, ease: 'easeOut' },
+			transition: { duration: 0.8, ease: 'easeOut' },
 		});
-	}, [controls]);
+	}, [heroControls]);
 
-	// Filter projects based on selected category
+	// Filter projects based on selected category.
+	// This useEffect will run on initial render and when selectedCategory changes.
 	useEffect(() => {
 		if (selectedCategory === 'All') {
 			setFilteredProjects(allProjects);
@@ -200,24 +208,21 @@ const ProjectsPage = () => {
 				),
 			);
 		}
-	}, [selectedCategory]);
+	}, [selectedCategory]); // Dependency on selectedCategory
 
-	// Animate filtered projects
-	const cardControls = useAnimation();
-	useEffect(() => {
-		cardControls.start({ opacity: 0, y: 50 }).then(() => {
-			// Animate out before animating in
-			cardControls.start((i: number) => ({
-				opacity: 1,
-				y: 0,
-				transition: {
-					delay: i * 0.1, // Faster stagger for more projects
-					duration: 0.6,
-					ease: 'easeOut',
-				},
-			}));
-		});
-	}, [filteredProjects, cardControls]); // Re-run animation when filteredProjects changes
+	// Variant for individual project cards for staggered animation
+	const cardVariants = {
+		hidden: { opacity: 0, y: 50 },
+		visible: (i: number) => ({
+			opacity: 1,
+			y: 0,
+			transition: {
+				delay: i * 0.1, // Stagger delay
+				duration: 0.6,
+				ease: 'easeOut',
+			},
+		}),
+	};
 
 	return (
 		<main className="bg-white text-gray-900">
@@ -225,14 +230,13 @@ const ProjectsPage = () => {
 			<section
 				className={`relative h-[55vh] flex items-center justify-center text-center bg-cover bg-center`}
 				style={{
-					backgroundImage: 'url(/images/projects-hero.jpg)',
+					backgroundImage: 'url(/images/projects/v2.png)',
 				}} // Add a dedicated hero image for projects
 			>
 				<div className="absolute inset-0 bg-black/60"></div>
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.8 }}
+					animate={heroControls} // Use heroControls for this animation
 					className="relative z-10 px-4 sm:px-6 lg:px-8"
 				>
 					<h1
@@ -256,7 +260,8 @@ const ProjectsPage = () => {
 					{/* Section Header */}
 					<motion.div
 						initial={{ opacity: 0, y: -20 }}
-						animate={controls}
+						animate={{ opacity: 1, y: 0 }} // Simple animate for this section header
+						transition={{ duration: 0.6, ease: 'easeOut' }}
 						className="mb-16 text-center"
 					>
 						<div className="flex items-center justify-center gap-4 mb-4">
@@ -304,70 +309,76 @@ const ProjectsPage = () => {
 					{/* Projects Grid */}
 					<motion.div
 						className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-						// Key allows Framer Motion to recognize children changes for re-animation
-						key={selectedCategory}
+						// Key allows AnimatePresence to detect changes in children for exit/enter animations
+						key={selectedCategory} // Important: This remounts the grid on category change
 					>
-						{filteredProjects.map((project, index) => (
-							<motion.div
-								key={project.id} // Use unique project ID as key
-								custom={index}
-								initial={{ opacity: 0, y: 50 }}
-								animate={cardControls} // Apply animation to each card
-								className="relative rounded-2xl shadow-xl overflow-hidden group cursor-pointer transform hover:scale-103 transition-all duration-500 ease-out"
-								style={{
-									backgroundImage: `url(${project.imageUrl})`,
-									backgroundSize: 'cover',
-									backgroundPosition: 'center',
-									minHeight: '400px', // Consistent height for cards
-								}}
-							>
-								<Link
-									href={`/projects/${project.id}`}
-									passHref
+						<AnimatePresence mode="wait">
+							{' '}
+							{/* Wait for exit animation to complete before new enter */}
+							{filteredProjects.map((project, index) => (
+								<motion.div
+									key={project.id} // Use unique project ID as key for each individual item
+									custom={index}
+									// variants={cardVariants}
+									initial="hidden"
+									animate="visible"
+									exit="hidden" // Animate out when filtered
+									className="relative rounded-2xl shadow-xl overflow-hidden group cursor-pointer transform hover:scale-103 transition-all duration-500 ease-out"
+									style={{
+										backgroundImage: `url(${project.imageUrl})`,
+										backgroundSize: 'cover',
+										backgroundPosition: 'center',
+										minHeight: '400px', // Consistent height for cards
+									}}
 								>
-									{/* Darkened Overlay */}
-									<motion.div className="absolute inset-0 bg-black/20 group-hover:bg-opacity-50 transition-all duration-500 ease-out"></motion.div>
+									<Link
+										href={`/projects/${project.id}`}
+										passHref
+									>
+										{/* Darkened Overlay */}
+										<motion.div className="absolute inset-0 bg-black/20 group-hover:bg-opacity-50 transition-all duration-500 ease-out"></motion.div>
 
-									{/* Project Content */}
-									<div className="absolute inset-x-0 bottom-0 p-6 flex flex-col items-start text-white">
-										<div
-											className="bg-white/10 rounded-lg p-5 w-full text-left"
-											style={{
-												backdropFilter: 'blur(8px)',
-											}}
-										>
-											<p className="text-sm font-sans uppercase tracking-wider text-[#9C110E] mb-2 font-semibold">
-												{project.category}
-											</p>
-											<h3
-												className={`text-2xl font-serif font-semibold text-white mb-2 tracking-wide ${playfair.className}`}
-											>
-												{project.title}
-											</h3>
-											<p
-												className={`text-base font-sans text-gray-200 mb-4 ${work_sans.className}`}
-											>
-												{project.location}
-											</p>
-											<motion.button
-												whileHover={{
-													scale: 1.05,
-													backgroundColor: '#ffffff',
-													color: '#9C110E',
-												}}
-												whileTap={{ scale: 0.95 }}
-												className={`px-6 py-3 text-base font-sans font-medium rounded-full shadow-md bg-[#9c100e20] border border-[#9c100eb6] text-white transition-all duration-300 ease-in-out hover:shadow-lg ${work_sans.className}`}
+										{/* Project Content */}
+										<div className="absolute inset-x-0 bottom-0 p-6 flex flex-col items-start text-white">
+											<div
+												className="bg-white/10 rounded-lg p-5 w-full text-left"
 												style={{
-													backdropFilter: 'blur(10px)',
+													backdropFilter: 'blur(8px)',
 												}}
 											>
-												View Details
-											</motion.button>
+												<p className="text-sm font-sans uppercase tracking-wider text-[#9C110E] mb-2 font-semibold">
+													{project.category}
+												</p>
+												<h3
+													className={`text-2xl font-serif font-semibold text-white mb-2 tracking-wide ${playfair.className}`}
+												>
+													{project.title}
+												</h3>
+												<p
+													className={`text-base font-sans text-gray-200 mb-4 ${work_sans.className}`}
+												>
+													{project.location}
+												</p>
+												<motion.button
+													whileHover={{
+														scale: 1.05,
+														backgroundColor: '#ffffff',
+														color: '#9C110E',
+													}}
+													whileTap={{ scale: 0.95 }}
+													className={`px-6 py-3 text-base font-sans font-medium rounded-full shadow-md bg-[#9c100e20] border border-[#9c100eb6] text-white transition-all duration-300 ease-in-out hover:shadow-lg ${work_sans.className}`}
+													style={{
+														backdropFilter: 'blur(10px)',
+													}}
+												>
+													View Details
+												</motion.button>
+											</div>
 										</div>
-									</div>
-								</Link>
-							</motion.div>
-						))}
+									</Link>
+								</motion.div>
+							))}
+						</AnimatePresence>
 					</motion.div>
 
 					{/* "Load More" or Pagination (Optional, if you have many projects) */}

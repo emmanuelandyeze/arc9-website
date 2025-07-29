@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import {
+	motion,
+	useAnimation,
+	AnimatePresence,
+} from 'framer-motion'; // Import AnimatePresence
 import {
 	Playfair_Display,
 	Work_Sans,
 } from 'next/font/google';
 import Image from 'next/image';
-import Link from 'next/link'; // Import Link for internal navigation
+import Link from 'next/link';
 
 const playfair = Playfair_Display({
 	weight: ['400', '700'],
@@ -35,7 +39,6 @@ interface BlogPost {
 }
 
 // Mock data for all blog posts
-// In a real application, this would come from an API call, CMS, or database
 const allBlogPosts: BlogPost[] = [
 	{
 		slug: 'designing-the-future-trends-in-modern-architecture',
@@ -43,7 +46,7 @@ const allBlogPosts: BlogPost[] = [
 			'Designing the Future: Trends in Modern Architecture',
 		excerpt:
 			'Explore the latest trends shaping the world of architecture, from sustainable materials to innovative designs that prioritize human well-being and environmental harmony. This deep dive covers biophilic design, smart building integration, and adaptive reuse strategies.',
-		imageUrl: '/images/blog/architecture-trends.jpg', // New placeholder image
+		imageUrl: '/images/projects/v2.png', // New placeholder image
 		date: 'July 25, 2025',
 		author: 'Arc9 Insights',
 		tags: ['Architecture', 'Trends', 'Sustainability'],
@@ -54,7 +57,7 @@ const allBlogPosts: BlogPost[] = [
 			'Creating Timeless Interiors: A Design Philosophy',
 		excerpt:
 			'Learn how to craft interior spaces that blend functionality with timeless elegance and personal style. We discuss the principles of classic design, material selection, and how to create lasting beauty in any home or commercial space.',
-		imageUrl: '/images/blog/timeless-interiors.jpg', // New placeholder image
+		imageUrl: '/images/projects/v2.png', // New placeholder image
 		date: 'July 20, 2025',
 		author: 'Aisha K.',
 		tags: ['Interior Design', 'Home Decor', 'Style'],
@@ -64,7 +67,7 @@ const allBlogPosts: BlogPost[] = [
 		title: 'Mastering Project Management in Construction',
 		excerpt:
 			'Discover key strategies for managing construction projects efficiently, ensuring quality, timeliness, and budget adherence. This article delves into risk management, stakeholder communication, and technological advancements in project oversight.',
-		imageUrl: '/images/blog/project-management.jpg', // New placeholder image
+		imageUrl: '/images/projects/v2.png', // New placeholder image
 		date: 'July 15, 2025',
 		author: 'David L.',
 		tags: [
@@ -79,7 +82,7 @@ const allBlogPosts: BlogPost[] = [
 			'The Rise of Smart Homes: Integrating Technology Seamlessly',
 		excerpt:
 			'Explore how smart home technology is revolutionizing modern living, from automated climate control to integrated security systems, enhancing convenience and energy efficiency.',
-		imageUrl: '/images/blog/smart-home.jpg', // New placeholder image
+		imageUrl: '/images/projects/v2.png', // New placeholder image
 		date: 'July 10, 2025',
 		author: 'Arc9 Tech',
 		tags: ['Technology', 'Smart Home', 'Innovation'],
@@ -90,7 +93,7 @@ const allBlogPosts: BlogPost[] = [
 			'Sustainable Building Materials for a Greener Future',
 		excerpt:
 			'A comprehensive guide to eco-friendly building materials that reduce environmental impact and improve indoor air quality, contributing to a healthier planet and living spaces.',
-		imageUrl: '/images/blog/sustainable-materials.jpg', // New placeholder image
+		imageUrl: '/images/projects/v2.png', // New placeholder image
 		date: 'July 5, 2025',
 		author: 'EcoBuild Team',
 		tags: ['Sustainability', 'Materials', 'Green Building'],
@@ -101,42 +104,73 @@ const allBlogPosts: BlogPost[] = [
 			'Reimagining Urban Spaces: The Power of Public Design',
 		excerpt:
 			'How thoughtful urban planning and design can transform public spaces into vibrant, functional, and aesthetically pleasing environments for communities to thrive.',
-		imageUrl: '/images/blog/urban-design.jpg', // New placeholder image
+		imageUrl: '/images/projects/v2.png', // New placeholder image
 		date: 'July 1, 2025',
 		author: 'Urban Visionaries',
 		tags: ['Urban Planning', 'Design', 'Community'],
 	},
+	// Add more blog posts here to test pagination if needed
+	{
+		slug: 'future-of-workspaces',
+		title:
+			'The Future of Workspaces: Design for Productivity',
+		excerpt:
+			'How modern office design is evolving to boost productivity and employee well-being in hybrid work environments.',
+		imageUrl: '/images/projects/v2.png',
+		date: 'June 28, 2025',
+		author: 'Office Innovators',
+		tags: ['Interior Design', 'Workspaces', 'Innovation'],
+	},
+	{
+		slug: 'innovative-lighting-solutions',
+		title: 'Innovative Lighting Solutions for Modern Homes',
+		excerpt:
+			'Discover how smart and artistic lighting can transform the ambiance and functionality of any contemporary home.',
+		imageUrl: '/images/projects/v2.png',
+		date: 'June 20, 2025',
+		author: 'Light Masters',
+		tags: ['Interior Design', 'Home Decor', 'Technology'],
+	},
 ];
 
 const BlogPage = () => {
-	const controls = useAnimation();
+	// For hero section and static header animations
+	const heroControls = useAnimation();
+
 	const [displayedPosts, setDisplayedPosts] = useState<
 		BlogPost[]
 	>([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const postsPerPage = 6; // Number of posts to show per page
 
-	// For future filtering/search, if implemented:
-	// const [searchTerm, setSearchTerm] = useState('');
-	// const [selectedTag, setSelectedTag] = useState('All');
-
 	// Calculate total pages for pagination
 	const totalPages = Math.ceil(
 		allBlogPosts.length / postsPerPage,
 	);
 
+	// Initial animation for the hero section
+	useEffect(() => {
+		heroControls.start({
+			opacity: 1,
+			y: 0,
+			transition: { duration: 0.8, ease: 'easeOut' },
+		});
+	}, [heroControls]);
+
 	// Update displayed posts based on current page
+	// This useEffect runs on initial mount and whenever currentPage changes
 	useEffect(() => {
 		const startIndex = (currentPage - 1) * postsPerPage;
 		const endIndex = startIndex + postsPerPage;
 		setDisplayedPosts(
 			allBlogPosts.slice(startIndex, endIndex),
 		);
-	}, [currentPage, postsPerPage]); // Re-run when page changes
+	}, [currentPage, postsPerPage]);
 
-	// Animation for the post cards when they load or page changes
-	useEffect(() => {
-		controls.start((i: number) => ({
+	// Variants for individual blog post cards for staggered animation
+	const cardVariants = {
+		hidden: { opacity: 0, y: 50 },
+		visible: (i: number) => ({
 			opacity: 1,
 			y: 0,
 			transition: {
@@ -144,8 +178,13 @@ const BlogPage = () => {
 				duration: 0.8,
 				ease: 'easeOut',
 			},
-		}));
-	}, [displayedPosts, controls]); // Re-run animation when displayedPosts change
+		}),
+		exit: {
+			opacity: 0,
+			y: -50,
+			transition: { duration: 0.5, ease: 'easeOut' },
+		}, // Animate out
+	};
 
 	const handlePageChange = (page: number) => {
 		setCurrentPage(page);
@@ -161,14 +200,14 @@ const BlogPage = () => {
 			<section
 				className={`relative h-[55vh] flex items-center justify-center text-center bg-cover bg-center`}
 				style={{
-					backgroundImage: 'url(/images/blog-hero.jpg)',
+					backgroundImage:
+						'url(/images/projects/GYM 3.png)',
 				}} // Add a dedicated hero image for blog
 			>
 				<div className="absolute inset-0 bg-black/60"></div>
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.8 }}
+					animate={heroControls}
 					className="relative z-10 px-4 sm:px-6 lg:px-8"
 				>
 					<h1
@@ -220,68 +259,80 @@ const BlogPage = () => {
 					</motion.div>
 
 					{/* Blog Post Grid */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-						{displayedPosts.map((post, index) => (
-							<motion.div
-								key={post.slug} // Use unique slug as key
-								custom={index}
-								initial={{ opacity: 0, y: 50 }}
-								animate={controls}
-								className="relative bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group cursor-pointer"
-							>
-								<Link href={`/blog/${post.slug}`} passHref>
-									{/* Blog Post Image */}
-									<motion.div
-										whileHover={{ scale: 1.05 }}
-										transition={{
-											duration: 0.4,
-											ease: 'easeOut',
-										}}
-										className="relative h-64 overflow-hidden"
+					<motion.div
+						key={currentPage} // Crucial: Re-key the parent div to trigger re-render and animation on page change
+						className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+					>
+						<AnimatePresence mode="wait">
+							{' '}
+							{/* Use AnimatePresence for exit animations */}
+							{displayedPosts.map((post, index) => (
+								<motion.div
+									key={post.slug} // Use unique slug as key for each individual item
+									custom={index}
+									// variants={cardVariants}
+									initial="hidden"
+									animate="visible"
+									exit="exit" // Apply exit animation
+									className="relative bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group cursor-pointer"
+								>
+									<Link
+										href={`/blog/${post.slug}`}
+										passHref
 									>
-										<Image
-											src={post.imageUrl}
-											alt={post.title}
-											layout="fill"
-											objectFit="cover"
-											className="transform transition-transform duration-300 group-hover:scale-110"
-										/>
-										{/* Optional subtle overlay on hover */}
-										<div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-									</motion.div>
-
-									{/* Blog Post Content */}
-									<div className="p-6 flex flex-col items-start text-left">
-										<p
-											className={`text-sm text-gray-500 font-sans mb-2 ${work_sans.className}`}
-										>
-											{post.date} • {post.author}
-										</p>
-										<h3
-											className={`text-xl font-serif font-semibold mb-3 text-gray-800 tracking-wide ${playfair.className}`}
-										>
-											{post.title}
-										</h3>
-										<p
-											className={`text-base text-gray-600 font-sans mb-4 line-clamp-3 ${work_sans.className}`}
-										>
-											{post.excerpt}
-										</p>
-										<motion.button
-											whileHover={{
-												scale: 1.05,
-												backgroundColor: '#9c100e25',
+										{/* Blog Post Image */}
+										<motion.div
+											whileHover={{ scale: 1.05 }}
+											transition={{
+												duration: 0.4,
+												ease: 'easeOut',
 											}}
-											whileTap={{ scale: 0.95 }}
-											className={`px-6 py-2 text-base font-sans font-medium rounded-full shadow-md bg-[#9c100e25] border border-[#9c100eb6] text-[#9C110E] transition-all duration-300 ease-in-out hover:shadow-lg`}
+											className="relative h-64 overflow-hidden"
 										>
-											Read More
-										</motion.button>
-									</div>
-								</Link>
-							</motion.div>
-						))}
-					</div>
+											<Image
+												src={post.imageUrl}
+												alt={post.title}
+												layout="fill"
+												objectFit="cover"
+												className="transform transition-transform duration-300 group-hover:scale-110"
+											/>
+											{/* Optional subtle overlay on hover */}
+											<div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+										</motion.div>
+
+										{/* Blog Post Content */}
+										<div className="p-6 flex flex-col items-start text-left">
+											<p
+												className={`text-sm text-gray-500 font-sans mb-2 ${work_sans.className}`}
+											>
+												{post.date} • {post.author}
+											</p>
+											<h3
+												className={`text-xl font-serif font-semibold mb-3 text-gray-800 tracking-wide ${playfair.className}`}
+											>
+												{post.title}
+											</h3>
+											<p
+												className={`text-base text-gray-600 font-sans mb-4 line-clamp-3 ${work_sans.className}`}
+											>
+												{post.excerpt}
+											</p>
+											<motion.button
+												whileHover={{
+													scale: 1.05,
+													backgroundColor: '#9c100e25',
+												}}
+												whileTap={{ scale: 0.95 }}
+												className={`px-6 py-2 text-base font-sans font-medium rounded-full shadow-md bg-[#9c100e25] border border-[#9c100eb6] text-[#9C110E] transition-all duration-300 ease-in-out hover:shadow-lg`}
+											>
+												Read More
+											</motion.button>
+										</div>
+									</Link>
+								</motion.div>
+							))}
+						</AnimatePresence>
+					</motion.div>
 
 					{/* Pagination */}
 					{totalPages > 1 && (
