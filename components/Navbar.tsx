@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation'; // Import usePathname for active link detection
 import { motion, AnimatePresence } from 'framer-motion';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
 import Image from 'next/image';
@@ -11,6 +12,7 @@ interface NavLinkProps {
 	children: React.ReactNode;
 	onClick?: () => void;
 	isTransparent?: boolean;
+	isActive?: boolean; // New prop to indicate if the link is active
 }
 
 const NavLink: React.FC<NavLinkProps> = ({
@@ -18,12 +20,17 @@ const NavLink: React.FC<NavLinkProps> = ({
 	children,
 	onClick,
 	isTransparent,
+	isActive, // Destructure isActive
 }) => (
 	<Link
 		href={href}
 		className={`relative block py-2 px-4 text-lg font-heading transition-all duration-300 rounded-full ${
 			!isTransparent
-				? 'text-neutral-800 hover:text-neutral-900 hover:bg-neutral-100/30'
+				? isActive // Apply different colors based on active state when scrolled
+					? 'text-neutral-900 bg-neutral-100/50' // Active when scrolled
+					: 'text-neutral-800 hover:text-neutral-900 hover:bg-neutral-100/30'
+				: isActive // Apply different colors based on active state when transparent
+				? 'text-white bg-white/30' // Active when transparent
 				: 'text-white/90 hover:text-white hover:bg-white/20'
 		}`}
 		onClick={onClick}
@@ -31,12 +38,19 @@ const NavLink: React.FC<NavLinkProps> = ({
 		{children}
 		<motion.span
 			className={`absolute bottom-0 left-0 h-[2px] ${
-				isTransparent ? 'bg-neutral-800' : 'bg-white/80'
+				isTransparent // Active underline color depends on transparent state
+					? isActive
+						? 'bg-white'
+						: 'bg-neutral-800' // White for active when transparent, otherwise default
+					: isActive
+					? 'bg-neutral-900'
+					: 'bg-white/80' // Darker for active when scrolled, otherwise default
 			}`}
 			initial={{ scaleX: 0 }}
-			whileHover={{ scaleX: 1 }}
+			// Only show hover underline if not active
+			whileHover={{ scaleX: isActive ? 1 : 1 }} // Keep active underline visible, or animate on hover
 			transition={{ duration: 0.3, ease: 'easeInOut' }}
-			style={{ originX: 0 }}
+			style={{ originX: 0, scaleX: isActive ? 1 : 0 }} // Ensure active link always has the underline
 		/>
 	</Link>
 );
@@ -45,10 +59,15 @@ const MobileNavLink: React.FC<NavLinkProps> = ({
 	href,
 	children,
 	onClick,
+	isActive, // New prop for mobile active state
 }) => (
 	<Link
 		href={href}
-		className="block text-4xl font-heading text-neutral-800 hover:text-neutral-900 hover:bg-neutral-100/30 py-4 px-6 transition-all duration-300 rounded-md"
+		className={`block text-4xl font-heading py-4 px-6 transition-all duration-300 rounded-md ${
+			isActive
+				? 'text-[#9C110E] bg-neutral-100/70' // Active style for mobile
+				: 'text-neutral-800 hover:text-neutral-900 hover:bg-neutral-100/30'
+		}`}
 		onClick={onClick}
 	>
 		{children}
@@ -59,6 +78,7 @@ const Navbar: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [scrolled, setScrolled] = useState(false);
 	const scrollY = useRef(0);
+	const pathname = usePathname(); // Get the current path
 
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
@@ -108,8 +128,8 @@ const Navbar: React.FC = () => {
 	}, [isOpen]);
 
 	const navLinks = [
+		{ name: 'Home', href: '/' }, // Added Home link for root path
 		{ name: 'About us', href: '/about' },
-
 		{ name: 'Services', href: '/services' },
 		{ name: 'Projects', href: '/projects' },
 		{ name: 'Blog', href: '/blog' },
@@ -196,6 +216,12 @@ const Navbar: React.FC = () => {
 								key={link.name}
 								href={link.href}
 								isTransparent={!scrolled}
+								isActive={
+									// Special handling for the Home link to be active only on the root
+									link.href === '/'
+										? pathname === '/'
+										: pathname.startsWith(link.href)
+								}
 							>
 								{link.name}
 							</NavLink>
@@ -276,6 +302,12 @@ const Navbar: React.FC = () => {
 									<MobileNavLink
 										href={link.href}
 										onClick={() => setIsOpen(false)}
+										isActive={
+											// Special handling for the Home link to be active only on the root
+											link.href === '/'
+												? pathname === '/'
+												: pathname.startsWith(link.href)
+										}
 									>
 										{link.name}
 									</MobileNavLink>
