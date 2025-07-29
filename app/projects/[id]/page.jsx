@@ -24,35 +24,16 @@ const work_sans = Work_Sans({
 	variable: '--font-worksans',
 });
 
-// Define a detailed type for a single project
-interface Project {
-	id: string;
-	title: string;
-	category: string;
-	location: string;
-	mainImageUrl: string; // The prominent "major" image
-	year: number;
-	client: string;
-	area: string;
-	overview: string;
-	challenge: string;
-	solution: string;
-	results: string;
-	galleryImages: string[]; // Array of images for the gallery
-}
-
 // Mock function to simulate fetching project data
 // In a real application, you'd fetch this from a CMS, database, or API
-const getProjectById = (
-	id: string,
-): Project | undefined => {
-	const projects: Project[] = [
+const getProjectById = (id) => {
+	const projects = [
 		{
 			id: 'skyline-tower',
 			title: 'Skyline Tower: Urban Renaissance',
 			category: 'Architecture',
 			location: 'New York, NY',
-			mainImageUrl: '/images/projects/landing1.png',
+			mainImageUrl: '/images/projects/landing1.png', // The prominent "major" image
 			year: 2023,
 			client: 'Apex Group',
 			area: '500,000 sq ft',
@@ -125,22 +106,18 @@ const getProjectById = (
 };
 
 // Component for the Single Project Page
-const SingleProjectPage = ({
-	params,
-}: {
-	params: { id: string };
-}) => {
+const SingleProjectPage = ({ params }) => {
 	const { id } = params;
 	const project = getProjectById(id);
 
 	const [isFullscreen, setIsFullscreen] = useState(false);
 	const [currentImageIndex, setCurrentImageIndex] =
 		useState(0);
-	const modalRef = useRef<HTMLDivElement>(null);
+	const modalRef = useRef(null);
 
 	// Effect to handle keyboard navigation (ESC, Arrow keys)
 	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
+		const handleKeyDown = (e) => {
 			if (isFullscreen) {
 				if (e.key === 'Escape') {
 					setIsFullscreen(false);
@@ -158,12 +135,10 @@ const SingleProjectPage = ({
 	}, [isFullscreen, currentImageIndex, project]); // Add project to dependencies
 
 	// Handle click outside modal to close
-	const handleOutsideClick = (
-		e: React.MouseEvent<HTMLDivElement>,
-	) => {
+	const handleOutsideClick = (e) => {
 		if (
 			modalRef.current &&
-			!modalRef.current.contains(e.target as Node)
+			!modalRef.current.contains(e.target)
 		) {
 			setIsFullscreen(false);
 		}
@@ -199,7 +174,7 @@ const SingleProjectPage = ({
 		);
 	}
 
-	const openModal = (index: number) => {
+	const openModal = (index) => {
 		setCurrentImageIndex(index);
 		setIsFullscreen(true);
 	};
