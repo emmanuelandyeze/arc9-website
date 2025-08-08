@@ -48,7 +48,7 @@ const ServicesSection = () => {
 			title: 'Project Management',
 			description:
 				'Our comprehensive project management ensures seamless execution, adherence to timelines, budget control, and high-quality results for every construction phase.',
-			imageUrl: '/images/projects/service3.png',
+			imageUrl: '/images/home/services/project.jpg',
 		},
 	];
 

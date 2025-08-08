@@ -36,7 +36,7 @@ const Footer = () => {
 
 					{/* Quick Links */}
 					<div>
-						<h3 className="text-lg font-serif font-semibold text-[#9c100eab] mb-4">
+						<h3 className="text-lg font-serif font-semibold text-[#a5a5a5ab] mb-4">
 							Quick Links
 						</h3>
 						<ul className="space-y-2 text-sm font-sans text-gray-400">
@@ -77,7 +77,7 @@ const Footer = () => {
 
 					{/* Social Media Links */}
 					<div>
-						<h3 className="text-lg font-serif font-semibold text-[#9c100eab] mb-4">
+						<h3 className="text-lg font-serif font-semibold text-[#a5a5a5ab] mb-4">
 							Follow Us
 						</h3>
 						<div className="flex space-x-4">
@@ -130,16 +130,7 @@ const Footer = () => {
 				<div className="mt-8 pt-8 border-t border-gray-800 text-center">
 					<p className="text-sm font-sans text-gray-400">
 						&copy; {new Date().getFullYear()} Arc9 Consult
-						Limited. Built By{' '}
-						<a
-							className="underline text-[#9c100eab]"
-							href="https://emmanueleze.vercel.app"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							E.A.E
-						</a>
-						.
+						Limited. All rights reserved.
 					</p>
 				</div>
 			</div>

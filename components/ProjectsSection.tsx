@@ -5,6 +5,7 @@ import {
 	Playfair_Display,
 	Work_Sans,
 } from 'next/font/google';
+import { useRouter } from 'next/navigation';
 
 const playfair = Playfair_Display({
 	weight: ['400', '700'],
@@ -23,28 +24,28 @@ const work_sans = Work_Sans({
 const ProjectsSection = () => {
 	const projects = [
 		{
-			title: 'Skyline Tower',
+			title: 'Galilee Tower',
 			description:
 				'A modern high-rise blending sustainable materials with cutting-edge architectural design.',
 			category: 'Architecture',
-			location: 'New York, NY',
-			imageUrl: '/images/projects/landing1.png',
+			location: 'Banana Island, Lagos',
+			imageUrl: '/images/home/projects/architecture.png',
 		},
 		{
-			title: 'Cozy Haven Residence',
+			title: 'Dining room',
 			description:
 				'A beautifully crafted interior space combining comfort and elegance for modern living.',
 			category: 'Interior Design',
-			location: 'San Francisco, CA',
-			imageUrl: '/images/projects/v3a.png',
+			location: 'Banana Island, Lagos',
+			imageUrl: '/images/home/projects/interior.png',
 		},
 		{
-			title: 'Urban Park Development',
+			title: 'Luxury Residential High-Rise ',
 			description:
 				'A meticulously managed project delivering a vibrant public space on time and within budget.',
 			category: 'Project Management',
-			location: 'Chicago, IL',
-			imageUrl: '/images/projects/pro1.jpg',
+			location: 'Bourdillon, Ikoyi, Lagos',
+			imageUrl: '/images/home/projects/project2.png',
 		},
 		{
 			title: 'Riverside Walkway',
@@ -55,25 +56,10 @@ const ProjectsSection = () => {
 			imageUrl:
 				'https://via.placeholder.com/600x750/BEE9E4/000000?text=Riverside+Walk',
 		},
-		{
-			title: 'Historic District Renovation',
-			description:
-				'Preserving heritage while integrating modern amenities and sustainable practices.',
-			category: 'Restoration',
-			location: 'Boston, MA',
-			imageUrl:
-				'https://via.placeholder.com/600x650/F0D9E0/000000?text=Historic+Renovation',
-		},
-		{
-			title: 'Tech Campus Landscape',
-			description:
-				'Designing green spaces that foster innovation and well-being for a tech giant.',
-			category: 'Landscape Architecture',
-			location: 'Seattle, WA',
-			imageUrl:
-				'https://via.placeholder.com/600x700/D9EFDF/000000?text=Tech+Campus',
-		},
+		
 	];
+
+	const router = useRouter();
 
 	const controls = useAnimation();
 
@@ -192,10 +178,10 @@ const ProjectsSection = () => {
 							boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
 						}}
 						whileTap={{ scale: 0.95 }}
-						className="px-10 py-4 bg-blue-700 text-white font-bold rounded-full shadow-lg hover:bg-blue-800 transition duration-300 ease-in-out text-lg"
+						className="px-10 py-4 bg-blue-700 cursor-pointer text-white font-bold rounded-full shadow-lg hover:bg-blue-800 transition duration-300 ease-in-out text-lg"
 						// You can replace this with a Next.js Link component or a function to navigate
 						onClick={() =>
-							alert('Navigating to Projects Page!')
+							router.push('/projects')
 						}
 					>
 						View More Projects
