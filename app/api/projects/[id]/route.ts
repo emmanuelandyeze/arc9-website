@@ -19,7 +19,7 @@ export async function GET(
 	request: Request,
     { params }: { params: Promise<{ id: string }> },
 ): Promise<NextResponse<any>> {
-	const { id } = params;
+	const { id } = await params;
 
 	await connect();
 
