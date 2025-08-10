@@ -6,99 +6,51 @@ import {
 	uploadToCloudinary,
 	destroyFromCloudinary,
 } from '@/lib/cloudinary';
+import mongoose from 'mongoose';
+import { NextResponse } from 'next/server';
+
+interface GetRequestParams {
+	params: {
+		id: string;
+	};
+}
+
+interface ErrorResponse {
+	error: string;
+}
 
 export async function GET(
-	req: Request,
-	{ params }: { params: { id: string } },
-) {
+	request: Request,
+	{ params }: GetRequestParams,
+): Promise<NextResponse<any>> {
+	const { id } = params;
+
 	await connect();
-	const blog = await Blog.findById(params.id).lean();
-	if (!blog) return new Response(null, { status: 404 });
-	return new Response(JSON.stringify(blog), {
-		status: 200,
-	});
-}
 
-export async function PUT(
-	req: Request,
-	{ params }: { params: { id: string } },
-) {
+	// Validate ObjectId format to avoid crash
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+		return NextResponse.json<ErrorResponse>(
+			{ error: 'Invalid project ID' },
+			{ status: 400 },
+		);
+	}
+
 	try {
-		await connect();
-		const ct = req.headers.get('content-type') || '';
-		let updated: any;
+		const project = await Blog.findById(id).lean();
 
-		if (ct.includes('multipart/form-data')) {
-			const { fields, files } = await parseForm(req);
-			updated = {
-				title: fields.title,
-				content: fields.content,
-				excerpt: fields.excerpt,
-			};
-
-			if (files.image) {
-				const file = Array.isArray(files.image)
-					? files.image[0]
-					: files.image;
-				const filepath =
-					file.filepath || (file as any).path;
-				const res = await uploadToCloudinary(
-					filepath,
-					'architect/blogs',
-				);
-				updated.image = {
-					url: res.secure_url,
-					public_id: res.public_id,
-				};
-			}
-		} else {
-			updated = await req.json();
+		if (!project) {
+			return NextResponse.json<ErrorResponse>(
+				{ error: 'Project not found' },
+				{ status: 404 },
+			);
 		}
 
-		const blog = await Blog.findByIdAndUpdate(
-			params.id,
-			{ ...updated, updatedAt: new Date() },
-			{ new: true },
-		);
-		if (!blog) return new Response(null, { status: 404 });
-		return new Response(JSON.stringify(blog), {
-			status: 200,
-		});
-	} catch (err: any) {
-		console.error(err);
-		return new Response(
-			JSON.stringify({ message: err.message }),
+		return NextResponse.json(project);
+	} catch (error) {
+		return NextResponse.json<ErrorResponse>(
+			{ error: 'Internal server error' },
 			{ status: 500 },
 		);
 	}
 }
 
-export async function DELETE(
-	req: Request,
-	{ params }: { params: { id: string } },
-) {
-	try {
-		await connect();
-		const blog = await Blog.findById(params.id);
-		if (!blog) return new Response(null, { status: 404 });
-
-		if (blog.image?.public_id) {
-			try {
-				await destroyFromCloudinary(blog.image.public_id);
-			} catch (e) {
-				console.warn('cloud delete failed', e);
-			}
-		}
-
-		await blog.remove();
-		return new Response(JSON.stringify({ success: true }), {
-			status: 200,
-		});
-	} catch (err: any) {
-		console.error(err);
-		return new Response(
-			JSON.stringify({ message: err.message }),
-			{ status: 500 },
-		);
-	}
-}
