@@ -80,9 +80,9 @@ const AboutSection = () => {
 						className="w-full h-auto object-cover transform transition-transform duration-700 hover:scale-105"
 					/> */}
 					<Image
-						src={'/images/projects/plan.jpg'}
+						src={'/images/projects/GA 1.png'}
 						alt="Full view"
-						// className="max-w-full max-h-full object-contain"
+						className="rounded-lg"
 						// style={{
 						// 	touchAction: 'pinch-zoom',
 						// }}
@@ -159,7 +159,7 @@ const AboutSection = () => {
 							&times;
 						</button>
 						<Image
-							src="/images/projects/plan.jpg"
+							src="/images/projects/service1.png"
 							alt="Full view"
 							className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
 							style={{

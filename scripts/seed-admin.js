@@ -1,0 +1,39 @@
+import 'dotenv/config';
+import connect from '../lib/mongodb.js';
+import User from '../models/User.js';
+import bcrypt from 'bcryptjs';
+
+async function seed() {
+	try {
+		await connect();
+
+		const pw = 'SuperSecurePassword123!';
+		const hash = await bcrypt.hash(pw, 10);
+
+		const existing = await User.findOne({
+			email: 'admin@example.com',
+		});
+		if (existing) {
+			console.log(
+				'⚠️ Admin user already exists:',
+				existing.email,
+			);
+			process.exit(0);
+		}
+
+		const admin = await User.create({
+			name: 'Admin',
+			email: 'admin@example.com',
+			passwordHash: hash,
+			role: 'admin',
+		});
+
+		console.log('✅ Seeded admin:', admin.email);
+		process.exit(0);
+	} catch (err) {
+		console.error('❌ Error seeding admin:', err);
+		process.exit(1);
+	}
+}
+
+seed();

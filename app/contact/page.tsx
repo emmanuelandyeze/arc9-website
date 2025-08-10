@@ -183,7 +183,7 @@ const ContactPage = () => {
 									<p
 										className={`text-lg text-gray-700 ${work_sans.className}`}
 									>
-										+234 801 234 5678
+										+234 810 275 1710
 									</p>
 								</div>
 							</div>
@@ -198,7 +198,7 @@ const ContactPage = () => {
 									<p
 										className={`text-lg text-gray-700 ${work_sans.className}`}
 									>
-										info@arc9consult.com
+										arc9consultlimited@gmail.com
 									</p>
 								</div>
 							</div>
@@ -213,8 +213,8 @@ const ContactPage = () => {
 									<p
 										className={`text-lg text-gray-700 ${work_sans.className}`}
 									>
-										123 Design Avenue, Victoria Island,
-										Lagos, Nigeria
+										House 10, Covenant Estate Off Chief
+										Yesufu Abiodun, Oniru Road, Maroko Lagos
 									</p>
 								</div>
 							</div>
@@ -227,7 +227,7 @@ const ContactPage = () => {
 								Follow Us
 							</h3>
 							<div className="flex justify-center lg:justify-start gap-6">
-								<motion.a
+								{/* <motion.a
 									href="https://facebook.com"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -262,9 +262,9 @@ const ContactPage = () => {
 									className="text-gray-600 hover:text-[#9C110E] transition-colors duration-300"
 								>
 									<FaLinkedinIn size={28} />
-								</motion.a>
+								</motion.a> */}
 								<motion.a
-									href="https://instagram.com"
+									href="https://www.instagram.com/arc9consult/?hl=en"
 									target="_blank"
 									rel="noopener noreferrer"
 									whileHover={{

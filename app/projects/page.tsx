@@ -28,148 +28,18 @@ const work_sans = Work_Sans({
 });
 
 // Define a type for project data for better type safety
-interface Project {
-	id: string; // Unique ID for each project for detail pages
-	title: string;
-	description: string;
-	category: string;
-	location: string;
-	imageUrl: string;
-	details?: string; // More detailed description for individual project pages
-	year?: number; // Completion year
-	client?: string; // Client name (optional)
-	area?: string; // Project area/size (e.g., "5000 sq ft")
-	// Add more fields as needed for a robust portfolio
+interface ProjectImage {
+	url: string;
+	// Add other properties if needed (e.g., alt, id)
 }
 
-const allProjects: Project[] = [
-	{
-		id: 'skyline-tower',
-		title: 'Skyline Tower',
-		description:
-			'A modern high-rise blending sustainable materials with cutting-edge architectural design.',
-		category: 'Architecture',
-		location: 'New York, NY',
-		imageUrl: '/images/projects/landing1.png',
-		details:
-			'Designed as a beacon of modern architecture and sustainability, Skyline Tower redefines urban living. Its innovative facade incorporates energy-efficient glazing, while internal systems optimize resource consumption. The project features mixed-use spaces including luxury residences, commercial offices, and ground-floor retail, all contributing to a vibrant city hub.',
-		year: 2023,
-		client: 'Apex Group',
-		area: '500,000 sq ft',
-	},
-	{
-		id: 'cozy-haven-residence',
-		title: 'Cozy Haven Residence',
-		description:
-			'A beautifully crafted interior space combining comfort and elegance for modern living.',
-		category: 'Interior Design',
-		location: 'San Francisco, CA',
-		imageUrl: '/images/projects/v3a.png',
-		details:
-			"This residential project focused on creating a serene and inviting atmosphere through a harmonious blend of natural materials, soft textures, and smart home technology. Every detail, from custom cabinetry to bespoke lighting, was meticulously chosen to enhance comfort and reflect the homeowner's sophisticated taste.",
-		year: 2022,
-		client: 'Private Client',
-		area: '3,500 sq ft',
-	},
-	{
-		id: 'urban-park-development',
-		title: 'Urban Park Development',
-		description:
-			'A meticulously managed project delivering a vibrant public space on time and within budget.',
-		category: 'Project Management',
-		location: 'Chicago, IL',
-		imageUrl: '/images/projects/pro1.jpg',
-		details:
-			'Spearheading the transformation of a derelict urban plot into a thriving community park. Our role encompassed full project lifecycle management, ensuring seamless coordination between landscape architects, city officials, and construction teams. The park now serves as a green lung for the city, featuring recreational areas, water features, and public art installations.',
-		year: 2024,
-		client: 'City of Chicago',
-		area: '15 acres',
-	},
-	{
-		id: 'riverside-walkway',
-		title: 'Riverside Walkway',
-		description:
-			'Connecting urban spaces with nature through thoughtful landscape design.',
-		category: 'Urban Planning',
-		location: 'Austin, TX',
-		imageUrl: '/images/projects/project-riverside.jpg', // Placeholder image from unsplash
-		details:
-			"A multi-phase urban planning initiative to rejuvenate the city's riverfront. The project included designing pedestrian walkways, bicycle paths, recreational zones, and integrating sustainable stormwater management solutions. The goal was to create an accessible and ecologically sensitive corridor that enhances public life and connection to nature.",
-		year: 2021,
-		client: 'Austin City Planning',
-		area: '5 miles of riverfront',
-	},
-	{
-		id: 'historic-district-renovation',
-		title: 'Historic District Renovation',
-		description:
-			'Preserving heritage while integrating modern amenities and sustainable practices.',
-		category: 'Restoration',
-		location: 'Boston, MA',
-		imageUrl: '/images/projects/project-historic.jpg', // Placeholder image from unsplash
-		details:
-			"Sensitive renovation of several landmark buildings within Boston's historic district. The project required careful adherence to preservation guidelines while introducing modern infrastructure and energy-efficient systems. Our work ensured the buildings maintained their original charm while offering contemporary functionality.",
-		year: 2020,
-		client: 'Boston Historic Trust',
-		area: 'Multiple Buildings',
-	},
-	{
-		id: 'tech-campus-landscape',
-		title: 'Tech Campus Landscape',
-		description:
-			'Designing green spaces that foster innovation and well-being for a tech giant.',
-		category: 'Landscape Architecture',
-		location: 'Seattle, WA',
-		imageUrl: '/images/projects/project-techcampus.jpg', // Placeholder image from unsplash
-		details:
-			'Development of an expansive, integrated landscape for a cutting-edge tech campus. The design focused on creating diverse outdoor work and relaxation zones, incorporating native plant species, and implementing smart irrigation systems to promote biodiversity and employee well-being.',
-		year: 2023,
-		client: 'Global Tech Corp',
-		area: '20 acres',
-	},
-	{
-		id: 'luxury-beachfront-villa',
-		title: 'Luxury Beachfront Villa',
-		description:
-			'An exclusive residential project offering panoramic ocean views and bespoke interior finishes.',
-		category: 'Architecture',
-		location: 'Malibu, CA',
-		imageUrl: '/images/projects/project-villa.jpg', // New image
-		details:
-			'This ultra-luxury villa was designed to seamlessly blend indoor and outdoor living. Features include expansive glass walls, infinity pools, and smart home automation, all meticulously crafted to create an unparalleled living experience with direct access to the beach.',
-		year: 2024,
-		client: 'Private Client',
-		area: '10,000 sq ft',
-	},
-	{
-		id: 'commercial-office-fitout',
-		title: 'Modern Office Fit-out',
-		description:
-			'Creating dynamic and collaborative workspaces for a growing startup.',
-		category: 'Interior Design',
-		location: 'Austin, TX',
-		imageUrl: '/images/projects/project-office.jpg', // New image
-		details:
-			'A complete interior redesign for a fast-paced tech startup. The project focused on open-plan workspaces, dedicated collaboration zones, and vibrant break areas to foster creativity and productivity. Sustainable materials and biophilic design elements were integrated throughout.',
-		year: 2022,
-		client: 'Innovate Solutions Inc.',
-		area: '25,000 sq ft',
-	},
-	{
-		id: 'hospitality-resort',
-		title: 'Desert Oasis Resort',
-		description:
-			'A luxurious resort complex offering an immersive guest experience in a unique desert landscape.',
-		category: 'Architecture',
-		location: 'Dubai, UAE',
-		imageUrl: '/images/projects/project-resort.jpg', // New image
-		details:
-			'Designed to harmonize with its desert surroundings, this resort complex combines traditional Arabian architectural elements with modern luxury. It features private villas, a wellness center, and extensive landscaping with indigenous flora, creating an exclusive and serene retreat.',
-		year: 2025,
-		client: 'Desert Holdings',
-		area: '50 acres',
-	},
-];
+interface Project {
+	_id: string; // Unique ID for each project for detail pages
+	title: string;
+	description: string;
+	excerpt: string;
+	images: ProjectImage[];
+}
 
 const ProjectsPage = () => {
 	// For hero section animation
@@ -180,12 +50,32 @@ const ProjectsPage = () => {
 	const [filteredProjects, setFilteredProjects] = useState<
 		Project[]
 	>([]);
+	const [projects, setProjects] = useState<Project[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		async function fetchProjects() {
+			try {
+				const res = await fetch('/api/projects');
+				if (!res.ok)
+					throw new Error('Failed to fetch projects');
+				const data: Project[] = await res.json();
+				setProjects(data);
+				setLoading(false);
+			} catch (err: any) {
+				setError(err.message);
+				setLoading(false);
+			}
+		}
+		fetchProjects();
+	}, []);
 
 	// Dynamically get categories from allProjects
-	const categories = [
-		'All',
-		...new Set(allProjects.map((p) => p.category)),
-	];
+	// const categories = [
+	// 	'All',
+	// 	...new Set(projects.map((p) => p.category)),
+	// ];
 
 	// Initial animation for the hero section
 	useEffect(() => {
@@ -196,33 +86,25 @@ const ProjectsPage = () => {
 		});
 	}, [heroControls]);
 
-	// Filter projects based on selected category.
-	// This useEffect will run on initial render and when selectedCategory changes.
 	useEffect(() => {
-		if (selectedCategory === 'All') {
-			setFilteredProjects(allProjects);
-		} else {
-			setFilteredProjects(
-				allProjects.filter(
-					(p) => p.category === selectedCategory,
-				),
-			);
-		}
-	}, [selectedCategory]); // Dependency on selectedCategory
+		setFilteredProjects(projects);
+	}, [projects]);
 
-	// Variant for individual project cards for staggered animation
-	const cardVariants = {
-		hidden: { opacity: 0, y: 50 },
-		visible: (i: number) => ({
-			opacity: 1,
-			y: 0,
-			transition: {
-				delay: i * 0.1, // Stagger delay
-				duration: 0.6,
-				ease: 'easeOut',
-			},
-		}),
-	};
+	// Filter projects when projects or selectedCategory changes
+	// useEffect(() => {
+	// 	if (selectedCategory === 'All') {
+	// 		setFilteredProjects(projects);
+	// 	} else {
+	// 		setFilteredProjects(
+	// 			projects.filter(
+	// 				(p) => p.category === selectedCategory,
+	// 			),
+	// 		);
+	// 	}
+	// }, [projects, selectedCategory]);
+
+	if (loading) return <p>Loading projects...</p>;
+	if (error) return <p>Error loading projects: {error}</p>;
 
 	return (
 		<main className="bg-white text-gray-900">
@@ -286,7 +168,7 @@ const ProjectsPage = () => {
 					</motion.div>
 
 					{/* Category Filter */}
-					<div className="mb-12 flex flex-wrap justify-center gap-3 sm:gap-4">
+					{/* <div className="mb-12 flex flex-wrap justify-center gap-3 sm:gap-4">
 						{categories.map((category) => (
 							<motion.button
 								key={category}
@@ -304,7 +186,7 @@ const ProjectsPage = () => {
 								{category}
 							</motion.button>
 						))}
-					</div>
+					</div> */}
 
 					{/* Projects Grid */}
 					<motion.div
@@ -317,7 +199,7 @@ const ProjectsPage = () => {
 							{/* Wait for exit animation to complete before new enter */}
 							{filteredProjects.map((project, index) => (
 								<motion.div
-									key={project.id} // Use unique project ID as key for each individual item
+									key={project._id} // Use unique project ID as key for each individual item
 									custom={index}
 									// variants={cardVariants}
 									initial="hidden"
@@ -325,14 +207,14 @@ const ProjectsPage = () => {
 									exit="hidden" // Animate out when filtered
 									className="relative rounded-2xl shadow-xl overflow-hidden group cursor-pointer transform hover:scale-103 transition-all duration-500 ease-out"
 									style={{
-										backgroundImage: `url(${project.imageUrl})`,
+										backgroundImage: `url(${project.images[0]?.url})`, // Use the first image as background
 										backgroundSize: 'cover',
 										backgroundPosition: 'center',
 										minHeight: '400px', // Consistent height for cards
 									}}
 								>
 									<Link
-										href={`/projects/${project.id}`}
+										href={`/projects/${project._id}`}
 										passHref
 									>
 										{/* Darkened Overlay */}
@@ -346,9 +228,9 @@ const ProjectsPage = () => {
 													backdropFilter: 'blur(8px)',
 												}}
 											>
-												<p className="text-sm font-sans uppercase tracking-wider text-[#9C110E] mb-2 font-semibold">
+												{/* <p className="text-sm font-sans uppercase tracking-wider text-[#9C110E] mb-2 font-semibold">
 													{project.category}
-												</p>
+												</p> */}
 												<h3
 													className={`text-2xl font-serif font-semibold text-white mb-2 tracking-wide ${playfair.className}`}
 												>
@@ -357,7 +239,7 @@ const ProjectsPage = () => {
 												<p
 													className={`text-base font-sans text-gray-200 mb-4 ${work_sans.className}`}
 												>
-													{project.location}
+													{project.excerpt}
 												</p>
 												<motion.button
 													whileHover={{

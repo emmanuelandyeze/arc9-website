@@ -28,8 +28,8 @@
 		"**/*.tsx",
 		".next/types/**/*.ts",
 		"app/blog/[slug]/page.jsx",
-		"app/projects/[id]/page.jsx",
+		"app/projects/[id]/page.tsx",
 		"app/about/page.jsx"
-	],
+, "scripts/seed-admin.ts", "lib/mongodb.js", "models/User.js", "components/SingleProjectPage.jsx", "lib/parseForm.js"	],
 	"exclude": ["node_modules"]
 }

@@ -81,7 +81,7 @@ const Footer = () => {
 							Follow Us
 						</h3>
 						<div className="flex space-x-4">
-							<motion.a
+							{/* <motion.a
 								href="https://twitter.com"
 								target="_blank"
 								rel="noopener noreferrer"
@@ -100,9 +100,9 @@ const Footer = () => {
 								className="text-gray-400 hover:text-blue-300 transition-colors duration-300"
 							>
 								<Linkedin size={24} />
-							</motion.a>
+							</motion.a> */}
 							<motion.a
-								href="https://instagram.com"
+								href="https://www.instagram.com/arc9consult/?hl=en"
 								target="_blank"
 								rel="noopener noreferrer"
 								whileHover={{ scale: 1.2, rotate: 5 }}
