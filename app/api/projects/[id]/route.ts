@@ -9,11 +9,7 @@ import {
 import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
 
-interface GetRequestParams {
-	params: {
-		id: string;
-	};
-}
+// The GetRequestParams interface is no longer needed.
 
 interface ErrorResponse {
 	error: string;
@@ -21,7 +17,7 @@ interface ErrorResponse {
 
 export async function GET(
 	request: Request,
-	{ params }: GetRequestParams,
+	{ params }: { params: { id: string } }, // Correct way to type the params object
 ): Promise<NextResponse<any>> {
 	const { id } = params;
 
@@ -68,10 +64,19 @@ export async function PUT(
 
 		if (ct.includes('multipart/form-data')) {
 			const { fields, files } = await parseForm(req);
-			project.title = fields.title || project.title;
-			project.excerpt = fields.excerpt || project.excerpt;
+			// --- NEW: Update project fields from the form data ---
+			project.title =
+				(fields.title as string) || project.title;
+			project.excerpt =
+				(fields.excerpt as string) || project.excerpt;
 			project.description =
-				fields.description || project.description;
+				(fields.description as string) ||
+				project.description;
+			project.location =
+				(fields.location as string) || project.location;
+			project.category =
+				(fields.category as string) || project.category;
+			// --- END NEW ---
 
 			// add new images if provided
 			const imagesField = files.images;
@@ -95,22 +100,26 @@ export async function PUT(
 
 			// set main image
 			if (fields.mainPublicId) {
-                interface ProjectImage {
-                    url: string;
-                    public_id: string;
-                    isMain: boolean;
-                    toObject?: () => Omit<ProjectImage, 'toObject'>;
-                }
+				interface ProjectImage {
+					url: string;
+					public_id: string;
+					isMain: boolean;
+					toObject?: () => Omit<ProjectImage, 'toObject'>;
+				}
 
-                interface Fields {
-                    mainPublicId?: string;
-                    [key: string]: any;
-                }
+				interface Fields {
+					mainPublicId?: string;
+					[key: string]: any;
+				}
 
-                project.images = project.images.map((img: ProjectImage) => ({
-                    ...(img.toObject ? img.toObject() : img),
-                    isMain: img.public_id === (fields as Fields).mainPublicId,
-                }));
+				project.images = project.images.map(
+					(img: ProjectImage) => ({
+						...(img.toObject ? img.toObject() : img),
+						isMain:
+							img.public_id ===
+							(fields as Fields).mainPublicId,
+					}),
+				);
 			}
 
 			await project.save();
