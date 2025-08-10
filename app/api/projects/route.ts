@@ -3,7 +3,7 @@ import connect from '@/lib/mongodb';
 import Project from '@/models/Project';
 import type { NextRequest } from 'next/server';
 import cloudinary from 'cloudinary';
-import Jimp from 'jimp'; // <-- Use Jimp instead of sharp
+import { Jimp } from 'jimp'; // <-- Use Jimp instead of sharp
 
 // Configure Cloudinary
 cloudinary.v2.config({
