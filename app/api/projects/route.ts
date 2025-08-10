@@ -107,9 +107,7 @@ export async function POST(
             // --- Compression and resizing using Jimp ---
             const jimpImage = await Jimp.read(buffer);
             const compressedBuffer = await jimpImage
-                .resize(1200, Jimp.AUTO) // Resize to a max width of 1200, maintaining aspect ratio
-                .quality(80) // Set JPEG quality to 80
-                .getBufferAsync(Jimp.MIME_JPEG);
+                .resize({ w: 1200, h: 1200 })
             // --- End of Jimp compression ---
 
             // Now, use the compressed buffer for the upload
