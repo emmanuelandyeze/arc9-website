@@ -1,5 +1,5 @@
-// app/api/auth/[...nextauth]/route.ts
-import NextAuth from 'next-auth';
+// lib/auth.ts
+import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import clientPromise from '@/lib/mongodb-client-promise';
@@ -7,8 +7,7 @@ import connect from '@/lib/mongodb';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 
-const authOptions = {
-	// Removed 'export' from here
+export const authOptions: AuthOptions = {
 	adapter: MongoDBAdapter(clientPromise),
 	session: { strategy: 'jwt' } as const,
 	secret: process.env.NEXTAUTH_SECRET,
@@ -32,7 +31,6 @@ const authOptions = {
 					user.passwordHash,
 				);
 				if (!isValid) return null;
-				// return a user object (id, name, email)
 				return {
 					id: user._id.toString(),
 					name: user.name,
@@ -43,12 +41,8 @@ const authOptions = {
 	],
 	callbacks: {
 		async session({ session, token }: any) {
-			// attach token.id if needed
 			if (token?.sub) session.user.id = token.sub;
 			return session;
 		},
 	},
 };
-
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };

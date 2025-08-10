@@ -2,7 +2,7 @@
 import connect from '@/lib/mongodb';
 import Project from '@/models/Project';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import {
