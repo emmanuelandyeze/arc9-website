@@ -5,9 +5,10 @@ import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import clientPromise from '@/lib/mongodb-client-promise';
 import connect from '@/lib/mongodb';
 import User from '@/models/User';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
-export const authOptions = {
+const authOptions = {
+	// Removed 'export' from here
 	adapter: MongoDBAdapter(clientPromise),
 	session: { strategy: 'jwt' } as const,
 	secret: process.env.NEXTAUTH_SECRET,
