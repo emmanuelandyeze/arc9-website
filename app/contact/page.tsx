@@ -413,45 +413,7 @@ const ContactPage = () => {
 				</div>
 			</section>
 
-			{/* Google Map Section (Optional - Requires Google Maps API Key) */}
-			<section className="py-16 bg-gray-100">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<motion.h2
-						initial={{ opacity: 0, y: -20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, ease: 'easeOut' }}
-						className={`text-4xl sm:text-5xl font-serif font-bold leading-tight tracking-tight text-center text-gray-800 mb-12 ${playfair.className}`}
-					>
-						Find Our{' '}
-						<span className="text-[#9C110E]">Office</span>
-					</motion.h2>
-					<motion.div
-						initial={{ opacity: 0, scale: 0.95 }}
-						animate={{ opacity: 1, scale: 1 }}
-						transition={{ duration: 0.8, delay: 0.2 }}
-						className="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-xl border border-gray-200"
-					>
-						{/* Replace with your actual Google Map embed or a map component */}
-						<iframe
-							src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.636612711311!2d3.3982823750000003!3d6.43806299355745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b1a2d1d1d1d%3A0x1c1c1c1c1c1c1c1c!2sVictoria%20Island%2C%20Lagos!5e0!3m2!1sen!2sng!4v1678886400000!5m2!1sen!2sng" // Example iframe for Victoria Island, Lagos
-							width="100%"
-							height="100%"
-							style={{ border: 0 }}
-							allowFullScreen={false}
-							loading="lazy"
-							referrerPolicy="no-referrer-when-downgrade"
-							title="Office Location"
-						></iframe>
-						{/* Placeholder overlay if map doesn't load or for design */}
-						<div className="absolute inset-0 bg-gray-200 bg-opacity-50 flex items-center justify-center pointer-events-none">
-							<p className="text-gray-700 text-lg font-semibold">
-								Map loading... (Replace with actual Google
-								Maps embed)
-							</p>
-						</div>
-					</motion.div>
-				</div>
-			</section>
+			
 		</main>
 	);
 };

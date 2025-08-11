@@ -30,14 +30,16 @@ const ProjectsSection = () => {
 			category: 'Architecture',
 			location: 'Banana Island, Lagos',
 			imageUrl: '/images/home/projects/architecture.png',
+			link: '/projects/6898fa843414c32e218954af',
 		},
 		{
-			title: 'Dining room',
+			title: 'MBA Apartment Remodel',
 			description:
-				'A beautifully crafted interior space combining comfort and elegance for modern living.',
+				'The transformation involved redesigning the space to deliver elevated comfort, functionality, and modern style.',
 			category: 'Interior Design',
 			location: 'Banana Island, Lagos',
 			imageUrl: '/images/home/projects/interior.png',
+			link: '/projects/6898fbb33414c32e218954d6',
 		},
 		{
 			title: 'Luxury Residential High-Rise ',
@@ -46,17 +48,8 @@ const ProjectsSection = () => {
 			category: 'Project Management',
 			location: 'Bourdillon, Ikoyi, Lagos',
 			imageUrl: '/images/home/projects/project2.png',
+			link: '/projects/6898f9be3414c32e218954aa',
 		},
-		{
-			title: 'Riverside Walkway',
-			description:
-				'Connecting urban spaces with nature through thoughtful landscape design.',
-			category: 'Urban Planning',
-			location: 'Austin, TX',
-			imageUrl:
-				'https://via.placeholder.com/600x750/BEE9E4/000000?text=Riverside+Walk',
-		},
-		
 	];
 
 	const router = useRouter();
@@ -143,7 +136,7 @@ const ProjectsSection = () => {
 									className="bg-white/10 bg-opacity-90 rounded-lg p-5 w-full text-left"
 									style={{ backdropFilter: 'blur(8px)' }}
 								>
-									<p className="text-sm font-sans uppercase tracking-wider text-red-800 mb-2">
+									<p className="text-sm font-sans uppercase tracking-wider text-gray-50 mb-2">
 										{project.category}
 									</p>
 									<h3 className="text-xl font-serif font-semibold text-white mb-2 tracking-wide">
@@ -158,8 +151,11 @@ const ProjectsSection = () => {
 											backgroundColor: '#bfdbfe',
 											color: '#1e40af',
 										}}
+										onClick={() => {
+											router.push(project.link)
+										}}
 										whileTap={{ scale: 0.95 }}
-										className="px-5 py-2 text-sm font-sans font-medium rounded-full shadow-md bg-blue-100 border border-blue-200 text-blue-700 transition-all duration-300 ease-in-out hover:shadow-lg"
+										className="px-5 py-2 text-sm cursor-pointer font-sans font-medium rounded-full shadow-md bg-blue-100 border border-blue-200 text-blue-700 transition-all duration-300 ease-in-out hover:shadow-lg"
 										style={{ backdropFilter: 'blur(10px)' }}
 									>
 										View Project
