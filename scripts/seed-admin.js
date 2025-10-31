@@ -8,7 +8,7 @@ async function seed() {
 		await connect();
 
 		const email = 'arc9consultlimited@gmail.com';
-		const pw = 'Tiavspfa91';
+		const pw = 'Tiavspfa91!';
 		const hash = await bcrypt.hash(pw, 10);
 
 		const existing = await User.findOne({

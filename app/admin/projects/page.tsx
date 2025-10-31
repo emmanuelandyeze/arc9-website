@@ -123,12 +123,12 @@ export default async function ProjectsAdmin() {
 										</span>
 									</div>
 									<div className="mt-4 sm:mt-0">
-										{/* <Link
+										<Link
 											href={`/admin/projects/${p._id}`}
 											className="inline-flex items-center px-5 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors duration-200 shadow-sm"
 										>
 											Edit Project
-										</Link> */}
+										</Link>
 									</div>
 								</li>
 							))}

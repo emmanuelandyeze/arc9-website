@@ -9,8 +9,7 @@ cloudinary.config({
 });
 
 export async function uploadToCloudinary(
-	path: string,
-	folder = 'architect',
+path: string, folder = 'architect', p0: { width: number; crop: string; }[],
 ) {
 	return cloudinary.uploader.upload(path, {
 		folder,
