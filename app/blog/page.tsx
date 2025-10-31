@@ -12,6 +12,7 @@ import {
 } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
+import { formatDate } from '@/lib/formatDate';
 
 const playfair = Playfair_Display({
 	weight: ['400', '700'],
@@ -32,106 +33,13 @@ interface BlogPost {
 	slug: string; // Unique slug for the post's URL (e.g., "designing-the-future")
 	title: string;
 	excerpt: string; // Short summary
-	imageUrl: string;
-	date: string; // Date string (e.g., 'July 15, 2025')
-	author: string;
-	tags: string[]; // For categorization/filtering
+	image: {
+		url: string;
+	};
+	createdAt: string; // Date string (e.g., 'July 15, 2025')
 }
 
 // Mock data for all blog posts
-const allBlogPosts: BlogPost[] = [
-	{
-		slug: 'designing-the-future-trends-in-modern-architecture',
-		title:
-			'Designing the Future: Trends in Modern Architecture',
-		excerpt:
-			'Explore the latest trends shaping the world of architecture, from sustainable materials to innovative designs that prioritize human well-being and environmental harmony. This deep dive covers biophilic design, smart building integration, and adaptive reuse strategies.',
-		imageUrl: '/images/projects/v2.png', // New placeholder image
-		date: 'July 25, 2025',
-		author: 'Arc9 Insights',
-		tags: ['Architecture', 'Trends', 'Sustainability'],
-	},
-	{
-		slug: 'creating-timeless-interiors-a-design-philosophy',
-		title:
-			'Creating Timeless Interiors: A Design Philosophy',
-		excerpt:
-			'Learn how to craft interior spaces that blend functionality with timeless elegance and personal style. We discuss the principles of classic design, material selection, and how to create lasting beauty in any home or commercial space.',
-		imageUrl: '/images/projects/v2.png', // New placeholder image
-		date: 'July 20, 2025',
-		author: 'Aisha K.',
-		tags: ['Interior Design', 'Home Decor', 'Style'],
-	},
-	{
-		slug: 'mastering-project-management-in-construction',
-		title: 'Mastering Project Management in Construction',
-		excerpt:
-			'Discover key strategies for managing construction projects efficiently, ensuring quality, timeliness, and budget adherence. This article delves into risk management, stakeholder communication, and technological advancements in project oversight.',
-		imageUrl: '/images/projects/v2.png', // New placeholder image
-		date: 'July 15, 2025',
-		author: 'David L.',
-		tags: [
-			'Project Management',
-			'Construction',
-			'Efficiency',
-		],
-	},
-	{
-		slug: 'the-rise-of-smart-homes-integrating-technology',
-		title:
-			'The Rise of Smart Homes: Integrating Technology Seamlessly',
-		excerpt:
-			'Explore how smart home technology is revolutionizing modern living, from automated climate control to integrated security systems, enhancing convenience and energy efficiency.',
-		imageUrl: '/images/projects/v2.png', // New placeholder image
-		date: 'July 10, 2025',
-		author: 'Arc9 Tech',
-		tags: ['Technology', 'Smart Home', 'Innovation'],
-	},
-	{
-		slug: 'sustainable-building-materials-for-a-greener-future',
-		title:
-			'Sustainable Building Materials for a Greener Future',
-		excerpt:
-			'A comprehensive guide to eco-friendly building materials that reduce environmental impact and improve indoor air quality, contributing to a healthier planet and living spaces.',
-		imageUrl: '/images/projects/v2.png', // New placeholder image
-		date: 'July 5, 2025',
-		author: 'EcoBuild Team',
-		tags: ['Sustainability', 'Materials', 'Green Building'],
-	},
-	{
-		slug: 'reimagining-urban-spaces-the-power-of-public-design',
-		title:
-			'Reimagining Urban Spaces: The Power of Public Design',
-		excerpt:
-			'How thoughtful urban planning and design can transform public spaces into vibrant, functional, and aesthetically pleasing environments for communities to thrive.',
-		imageUrl: '/images/projects/v2.png', // New placeholder image
-		date: 'July 1, 2025',
-		author: 'Urban Visionaries',
-		tags: ['Urban Planning', 'Design', 'Community'],
-	},
-	// Add more blog posts here to test pagination if needed
-	{
-		slug: 'future-of-workspaces',
-		title:
-			'The Future of Workspaces: Design for Productivity',
-		excerpt:
-			'How modern office design is evolving to boost productivity and employee well-being in hybrid work environments.',
-		imageUrl: '/images/projects/v2.png',
-		date: 'June 28, 2025',
-		author: 'Office Innovators',
-		tags: ['Interior Design', 'Workspaces', 'Innovation'],
-	},
-	{
-		slug: 'innovative-lighting-solutions',
-		title: 'Innovative Lighting Solutions for Modern Homes',
-		excerpt:
-			'Discover how smart and artistic lighting can transform the ambiance and functionality of any contemporary home.',
-		imageUrl: '/images/projects/v2.png',
-		date: 'June 20, 2025',
-		author: 'Light Masters',
-		tags: ['Interior Design', 'Home Decor', 'Technology'],
-	},
-];
 
 const BlogPage = () => {
 	// For hero section and static header animations
@@ -140,13 +48,32 @@ const BlogPage = () => {
 	const [displayedPosts, setDisplayedPosts] = useState<
 		BlogPost[]
 	>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
 	const [currentPage, setCurrentPage] = useState(1);
 	const postsPerPage = 6; // Number of posts to show per page
 
 	// Calculate total pages for pagination
 	const totalPages = Math.ceil(
-		allBlogPosts.length / postsPerPage,
+		displayedPosts.length / postsPerPage,
 	);
+
+	useEffect(() => {
+		async function fetchBlogs() {
+			try {
+				const res = await fetch('/api/blog');
+				if (!res.ok)
+					throw new Error('Failed to fetch blogs');
+				const data: BlogPost[] = await res.json();
+				setDisplayedPosts(data);
+				setLoading(false);
+			} catch (err: any) {
+				setError(err.message);
+				setLoading(false);
+			}
+		}
+		fetchBlogs();
+	}, []);
 
 	// Initial animation for the hero section
 	useEffect(() => {
@@ -162,9 +89,6 @@ const BlogPage = () => {
 	useEffect(() => {
 		const startIndex = (currentPage - 1) * postsPerPage;
 		const endIndex = startIndex + postsPerPage;
-		setDisplayedPosts(
-			allBlogPosts.slice(startIndex, endIndex),
-		);
 	}, [currentPage, postsPerPage]);
 
 	// Variants for individual blog post cards for staggered animation
@@ -290,7 +214,7 @@ const BlogPage = () => {
 											className="relative h-64 overflow-hidden"
 										>
 											<Image
-												src={post.imageUrl}
+												src={post.image.url}
 												alt={post.title}
 												layout="fill"
 												objectFit="cover"
@@ -305,7 +229,7 @@ const BlogPage = () => {
 											<p
 												className={`text-sm text-gray-500 font-sans mb-2 ${work_sans.className}`}
 											>
-												{post.date} • {post.author}
+												{formatDate(post.createdAt)} • Arc9 Consult
 											</p>
 											<h3
 												className={`text-xl font-serif font-semibold mb-3 text-gray-800 tracking-wide ${playfair.className}`}

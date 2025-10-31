@@ -30,6 +30,6 @@
 		"app/blog/[slug]/page.jsx",
 		"app/projects/[id]/page.tsx",
 		"app/about/page.jsx"
-, "scripts/seed-admin.ts", "lib/mongodb.js", "models/User.js", "node_modules/SingleProjectPage.jsx", "lib/parseForm.js"	],
+, "scripts/seed-admin.ts", "lib/mongodb.js", "models/User.js", "node_modules/SingleProjectPage.jsx", "lib/parseForm.ts"	],
 	"exclude": ["node_modules"]
 }

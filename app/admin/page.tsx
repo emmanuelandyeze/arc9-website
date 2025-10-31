@@ -7,6 +7,7 @@ import {
 	Playfair_Display,
 	Work_Sans,
 } from 'next/font/google'; // Import fonts for consistent styling
+import LogoutButton from '@/components/LogoutButton';
 
 // Initialize Playfair Display for headings
 const playfair = Playfair_Display({
@@ -75,12 +76,7 @@ export default async function AdminPage() {
 								{session.user?.email}
 							</span>
 						</div>
-						<Link
-							href="/api/auth/signout"
-							className="px-6 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-md"
-						>
-							Log Out
-						</Link>
+						<LogoutButton />
 					</div>
 				</header>
 

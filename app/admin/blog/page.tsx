@@ -9,6 +9,7 @@ import {
 	Playfair_Display,
 	Work_Sans,
 } from 'next/font/google'; // Import fonts for consistent styling
+import AdminBlogList from '@/components/AdminBlogList';
 
 // Initialize Playfair Display for headings
 const playfair = Playfair_Display({
@@ -34,10 +35,21 @@ export default async function BlogAdmin() {
 	}
 
 	// Connect to MongoDB and fetch blog posts, sorting by creation date
-	await connect();
-	const posts = await Blog.find()
+	await connect(); // Ensure database connection
+	const posts = (await Blog.find()
 		.sort({ createdAt: -1 }) // Sort by most recent first
-		.lean(); // Use .lean() for plain JavaScript objects, improving performance
+		.lean()) as {
+		slug: string;
+		title: string;
+		excerpt: string;
+		image: { url: string };
+		createdAt: string;
+		_id: string; // Add _id as it's returned by MongoDB
+		__v: number; // Add __v as it's returned by MongoDB
+	}[];
+	
+	
+
 
 	return (
 		<main
@@ -100,51 +112,7 @@ export default async function BlogAdmin() {
 				</header>
 
 				{/* Blog Post List Section */}
-				<section className="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-					{posts.length > 0 ? (
-						<ul className="divide-y divide-gray-100">
-							{/* Map through posts and display them */}
-							{posts.map((p) => (
-								<li
-									key={String(p._id)} // Unique key for list items
-									className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-5 hover:bg-green-50 transition-colors duration-200"
-								>
-									<div className="flex-1">
-										<strong className="block text-xl font-semibold text-gray-800">
-											{p.title}
-										</strong>
-										<span className="text-gray-500 text-sm mt-1 block">
-											Created:{' '}
-											{new Date(
-												p.createdAt,
-											).toLocaleDateString()}
-										</span>
-									</div>
-									<div className="mt-4 sm:mt-0">
-										<Link
-											href={`/admin/blog/${p._id}`}
-											className="inline-flex items-center px-5 py-2 text-sm font-medium text-green-700 bg-green-100 rounded-md hover:bg-green-200 transition-colors duration-200 shadow-sm"
-										>
-											Edit Post
-										</Link>
-									</div>
-								</li>
-							))}
-						</ul>
-					) : (
-						// Message when no blog posts are found
-						<div className="p-8 text-center text-gray-500 text-lg">
-							No blog posts found.
-							<Link
-								href="/admin/blog/new"
-								className="text-blue-600 hover:underline ml-2 font-medium"
-							>
-								Create your first post here
-							</Link>
-							.
-						</div>
-					)}
-				</section>
+				<AdminBlogList posts={posts} />
 			</div>
 		</main>
 	);

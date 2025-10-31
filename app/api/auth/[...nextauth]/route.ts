@@ -8,7 +8,6 @@ import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 
 const authOptions = {
-	// Removed 'export' from here
 	adapter: MongoDBAdapter(clientPromise),
 	session: { strategy: 'jwt' } as const,
 	secret: process.env.NEXTAUTH_SECRET,
@@ -22,17 +21,31 @@ const authOptions = {
 			async authorize(credentials) {
 				if (!credentials?.email || !credentials?.password)
 					return null;
+
 				await connect();
 				const user = await User.findOne({
 					email: credentials.email,
 				});
-				if (!user || !user.passwordHash) return null;
+
+				if (!user || !user.passwordHash) {
+					console.log('User not found or no password hash');
+					return null;
+				}
+
+				console.log('Stored hash:', user.passwordHash);
+				console.log(
+					'Input password:',
+					credentials.password,
+				);
+
 				const isValid = await bcrypt.compare(
 					credentials.password,
 					user.passwordHash,
 				);
+				console.log('bcrypt.compare result:', isValid);
+
 				if (!isValid) return null;
-				// return a user object (id, name, email)
+
 				return {
 					id: user._id.toString(),
 					name: user.name,
@@ -46,6 +59,17 @@ const authOptions = {
 			// attach token.id if needed
 			if (token?.sub) session.user.id = token.sub;
 			return session;
+		},
+		// ADD THIS REDIRECT CALLBACK
+		async redirect({
+			url,
+			baseUrl,
+		}: {
+			url: string;
+			baseUrl: string;
+		}) {
+			// Always redirect to the /admin page after a successful login.
+			return baseUrl + '/admin';
 		},
 	},
 };

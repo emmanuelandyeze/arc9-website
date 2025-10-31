@@ -7,11 +7,12 @@ async function seed() {
 	try {
 		await connect();
 
-		const pw = 'Tiavspfa9l!';
+		const email = 'arc9consultlimited@gmail.com';
+		const pw = 'Tiavspfa91';
 		const hash = await bcrypt.hash(pw, 10);
 
 		const existing = await User.findOne({
-			email: 'arc9consultlimited@gmail.com',
+			email: email,
 		});
 		if (existing) {
 			console.log(
@@ -23,7 +24,7 @@ async function seed() {
 
 		const admin = await User.create({
 			name: 'Admin',
-			email: 'arc9consultlimited@gmail.com',
+			email: email,
 			passwordHash: hash,
 			role: 'admin',
 		});

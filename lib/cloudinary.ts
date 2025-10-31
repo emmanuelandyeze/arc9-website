@@ -21,8 +21,16 @@ export async function uploadToCloudinary(
 
 export async function destroyFromCloudinary(
 	publicId: string,
-) {
-	return cloudinary.uploader.destroy(publicId);
+): Promise<any> {
+	return new Promise((resolve, reject) => {
+		cloudinary.uploader.destroy(
+			publicId,
+			(error, result) => {
+				if (error) return reject(error);
+				resolve(result);
+			},
+		);
+	});
 }
 
 export default cloudinary;
